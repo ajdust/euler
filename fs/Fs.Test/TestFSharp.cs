@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using eulerfsharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 
@@ -27,63 +26,63 @@ namespace Fs.Test
         [TestMethod]
         public void IsCorrectProblem002()
         {
-            var answer = Problem002.Solve(4000000).ToString();
+            var answer = new Problem002().Solve();
             Assert.AreEqual(Answers["2"], answer);
         }
 
         [TestMethod]
         public void IsCorrectProblem003()
         {
-            var answer = Problem003.Solve(600851475143).ToString();
+            var answer = new Problem003().Solve();
             Assert.AreEqual(Answers["3"], answer);
         }
 
         [TestMethod]
         public void IsCorrectProblem004()
         {
-            var answer = Problem004.Solve.ToString();
+            var answer = new Problem004().Solve();
             Assert.AreEqual(Answers["4"], answer);
         }
 
         [TestMethod]
         public void IsCorrectProblem005()
         {
-            var answer = Problem005.Solve(20).ToString();
+            var answer = new Problem005().Solve();
             Assert.AreEqual(Answers["5"], answer);
         }
 
         [TestMethod]
         public void IsCorrectProblem006()
         {
-            var answer = Problem006.Solve(100).ToString();
+            var answer = new Problem006().Solve();
             Assert.AreEqual(Answers["6"], answer);
         }
 
         [TestMethod]
         public void IsCorrectProblem007()
         {
-            var answer = Problem007.Solve(10000).ToString();
+            var answer = new Problem007().Solve();
             Assert.AreEqual(Answers["7"], answer);
         }
 
         [TestMethod]
         public void IsCorrectProblem008()
         {
-            var answer = Problem008.Solve.ToString();
+            var answer = new Problem008().Solve();
             Assert.AreEqual(Answers["8"], answer);
         }
 
         [TestMethod]
         public void IsCorrectProblem009()
         {
-            var answer = Problem009.Solve.ToString();
+            var answer = new Problem009().Solve();
             Assert.AreEqual(Answers["9"], answer);
         }
 
         [TestMethod]
         public void IsCorrectProblem010()
         {
-            var answer = Problem010.Solve(2000000).ToString();
+            var answer = new Problem010().Solve();
             Assert.AreEqual(Answers["10"], answer);
         }
     }
