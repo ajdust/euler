@@ -85,5 +85,12 @@ namespace Fs.Test
             var answer = new Problem010().Solve();
             Assert.AreEqual(Answers["10"], answer);
         }
+
+        [TestMethod]
+        public void IsCorrectProblem011()
+        {
+            var answer = new Problem011().Solve();
+            Assert.AreEqual(Answers["11"], answer);
+        }
     }
 }
