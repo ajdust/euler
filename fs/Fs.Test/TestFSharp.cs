@@ -3,7 +3,7 @@ using eulerfsharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 
-namespace TestEuler
+namespace Fs.Test
 {
     [TestClass]
     public class TestFSharp
@@ -20,7 +20,7 @@ namespace TestEuler
         [TestMethod]
         public void IsCorrectProblem001()
         {
-            var answer = Problem001.Solve(999).ToString();
+            var answer = new Problem001().Solve();
             Assert.AreEqual(Answers["1"], answer);
         }
 

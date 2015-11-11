@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <None Include="Script.fsx" />
+    <Compile Include="Types.fs" />
     <Compile Include="Sequences.fs" />
     <Compile Include="Problem001.fs" />
     <Compile Include="Problem002.fs" />
