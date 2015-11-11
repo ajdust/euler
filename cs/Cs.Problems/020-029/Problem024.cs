@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 
-namespace euler
+namespace Cs.Problems
 {
     /// <title>Lexicographic permutations</title>
     /// <summary>

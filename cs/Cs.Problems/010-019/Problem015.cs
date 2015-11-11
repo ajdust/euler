@@ -3,7 +3,7 @@
 //
 // Solves Euler Problem 15.
 
-namespace euler
+namespace Cs.Problems
 {
     /// <title>Lattice paths</title>
     /// <summary>

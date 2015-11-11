@@ -7,7 +7,7 @@ using System;
 using System.Linq;
 using System.Numerics;
 
-namespace euler
+namespace Cs.Problems
 {
     /// <title>Factorial digit sum</title>
     /// <summary>

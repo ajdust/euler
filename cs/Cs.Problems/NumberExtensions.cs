@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace euler
+namespace Cs.Problems
 {
     public static class NumberExtensions
     {

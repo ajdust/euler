@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace euler
+namespace Cs.Problems
 {
     /// <title>Largest product in a series</title>
     /// <summary>

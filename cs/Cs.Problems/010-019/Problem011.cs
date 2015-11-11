@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace euler
+namespace Cs.Problems
 {
     /// <title>Largest product in a grid</title>
     /// <summary>

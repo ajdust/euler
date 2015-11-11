@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace euler
+namespace Cs.Problems
 {
 
     /// <title>Number letter counts</title>

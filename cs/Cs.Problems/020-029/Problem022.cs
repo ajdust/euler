@@ -4,11 +4,9 @@
 // Solves Euler Problem 22.
 
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Cs.Problems.Resources;
 
-namespace euler
+namespace Cs.Problems
 {
     /// <title>Names scores</title>
     /// <summary>
@@ -30,7 +28,7 @@ namespace euler
         }
         private static IEnumerable<string> ParseNamesList(string filepath)
         {
-            var contents = Resources.Get("Problem022_names.txt");
+            var contents = Resources.Resources.Get("Problem022_names.txt");
             return contents.Split('\n').SelectMany(line => line.Split(',')).Select(word => word.Trim('"'));
         } 
         

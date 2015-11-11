@@ -5,7 +5,7 @@
 
 using System;
 
-namespace euler
+namespace Cs.Problems
 {
     /// <title>Pandigital Products</title>
     /// <summary>

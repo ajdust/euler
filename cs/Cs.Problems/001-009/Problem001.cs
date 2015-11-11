@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace euler
+namespace Cs.Problems
 {
     /// <title>Multiples of 3 and 5</title>
     /// <summary>

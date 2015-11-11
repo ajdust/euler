@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace euler
+namespace Cs.Problems
 {
     /// <title>10001st prime</title>
     /// <summary>

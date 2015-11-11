@@ -1,4 +1,4 @@
-﻿namespace euler
+﻿namespace Cs.Problems
 {
     /// <title>Largest prime factor</title>
     /// <summary>

@@ -3,7 +3,7 @@
 //
 // Solves Euler problem 28.
 
-namespace euler
+namespace Cs.Problems
 {
     /// <title>Number spiral diagonals</title>
     /// <summary>

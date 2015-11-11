@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using euler;
+using Cs.Problems;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace euler
+namespace Cs.Problems
 {
     /// <title>Summation of primes</title>
     ///  <summary>

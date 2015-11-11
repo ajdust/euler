@@ -6,7 +6,7 @@
 using System;
 using System.Linq;
 
-namespace euler
+namespace Cs.Problems
 {
     /// <title>Counting Sundays</title>
     /// <summary>

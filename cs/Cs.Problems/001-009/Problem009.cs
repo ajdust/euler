@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace euler
+namespace Cs.Problems
 {
     /// <title>Special Pythagorean triplet</title>
     /// <summary>

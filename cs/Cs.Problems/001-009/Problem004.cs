@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace euler
+namespace Cs.Problems
 {
     /// <title>Largest palindrome product</title>
     /// <summary>

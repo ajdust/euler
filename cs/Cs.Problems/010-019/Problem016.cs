@@ -7,7 +7,7 @@ using System;
 using System.Linq;
 using System.Numerics;
 
-namespace euler
+namespace Cs.Problems
 {
     /// <title>Power digit sum</title>
     /// <summary>

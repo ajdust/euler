@@ -6,7 +6,7 @@
 using System.Linq;
 using System.Numerics;
 
-namespace euler
+namespace Cs.Problems
 {
     /// <title>1000-digit Fibonacci number</title>
     /// <summary>
