@@ -1,36 +1,45 @@
 ﻿namespace Fs
+
 module Sequences =
+    open System.Collections.Generic 
 
-    (* Original imperative Fibonacci solution
-
-    let Fibonacci = seq {
-        let mutable a = 0
-        let mutable b = 1
-        yield a
-        yield b
-        while true do
-            let temp = a + b
-            a <- b
-            b <- temp
-            yield b
-    }
-
-    *)
-
-    // This solution appears to be the most elegant, though not as readable, and not as inspiring as Haskell's lazy Fibonacci definition
-    let Fibonacci = Seq.unfold (fun (a, b) -> Some (a+b, (b, a+b)) ) (0, 1)
-
-    // A simple, inefficient primes sequence
-    let Primes = seq {
-        let mutable primes = [2L]
-        yield 2L
-        yield! seq {
-            for x in seq { 3L .. 2L .. System.Int64.MaxValue } do
-                if Seq.forall (fun p -> x % p <> 0L) primes then
-                    primes <- x :: primes
-                    yield x
+    // Memoize a sequence
+    let Memoize s =
+        let cache = List<_>()
+        seq {
+            yield! cache
+            for x in s |> Seq.skip cache.Count do
+                cache.Add(x)
+                yield x
         }
-    }
+
+    let Fibonacci =
+        let generator = fun (a, b) ->
+            let c = a+b in Some (c, (b, c))
+        seq { yield 0; yield 1; yield! Seq.unfold generator (0, 1) }
+        |> Memoize
+
+    // A prime generator from 
+    // http://stackoverflow.com/questions/4629734/the-sieve-of-eratosthenes-in-f
+    let Primes = 
+
+        let rec nextPrime n p primesMap =
+            if primesMap |> Map.containsKey n then
+                nextPrime (n + p) p primesMap
+            else
+                primesMap.Add(n, p)
+
+        let rec prime n primesMap =
+            seq {
+                if primesMap |> Map.containsKey n then
+                    let p = primesMap.Item n
+                    yield! prime (n + 1L) (nextPrime (n + p) p (primesMap.Remove n))
+                else
+                    yield n
+                    yield! prime (n + 1L) (primesMap.Add(n * n, n))
+            }
+
+        prime 2L Map.empty
 
     let PrimeFactors x = seq {
         let mutable quotient = x
@@ -56,24 +65,10 @@ module Sequences =
             yield (a, b, c)
     }
 
-    // A more efficient prime generator from 
-    // http://stackoverflow.com/questions/4629734/the-sieve-of-eratosthenes-in-f
-    // Let the prime experts handle the crazy functional prime algorithm, eh?
-    let (bigPrimes : seq<int64>) = 
-        let rec nextPrime n p primes =
-            if primes |> Map.containsKey n then
-                nextPrime (n + p) p primes
-            else
-                primes.Add(n, p)
-
-        let rec prime n primes =
-            seq {
-                if primes |> Map.containsKey n then
-                    let p = primes.Item n
-                    yield! prime (n + 1L) (nextPrime (n + p) p (primes.Remove n))
-                else
-                    yield n
-                    yield! prime (n + 1L) (primes.Add(n * n, n))
-            }
-
-        prime 2L Map.empty
+    // todo: figure out the best memoization strategy in F# and use it (yes, state is helpful!)
+    let TriangleNumbers = seq {
+        let mutable current = 0
+        for num in Seq.initInfinite id do
+            current <- current + num
+            yield current
+    }

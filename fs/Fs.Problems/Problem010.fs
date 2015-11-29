@@ -18,7 +18,7 @@ namespace Fs
 
     type Problem010 () =
 
-        let NumberSolve n = Sequences.bigPrimes |> Seq.takeWhile ((>=) n) |> Seq.sum
+        let NumberSolve n = Sequences.Primes |> Seq.takeWhile ((>=) n) |> Seq.sum
 
         member this.Solve () = NumberSolve 2000000L |> string
         interface IProblem with
