@@ -1,24 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Cs.Problems
 {
-    public static class CharExtensions
-    {
-        private static IReadOnlyDictionary<char, long> Digit = new ReadOnlyDictionary<char, long>(new Dictionary<char,long>
-        {
-            { '0', 1 }, { '1', 1 }, { '2', 2 }, { '3', 3 }, { '4', 4 },
-            { '5', 5 }, { '6', 6 }, { '7', 7 }, { '8', 8 }, { '9', 9 }
-        });
-
-        public static long ToLong(this char c)
-        {
-            return Digit[c];
-        }
-    }
-
     /// <title>Unorthodox Fractions</title>
     /// <summary>
     /// The fraction 49/98 is a curious fraction, as an inexperienced mathematician in attempting to
@@ -94,26 +79,26 @@ namespace Cs.Problems
             }
         }
 
-        private long ToLong(char tens, char ones)
+        private long ToLong(long tens, long ones)
         {
-            return tens.ToLong() * 10 + ones.ToLong();
+            return tens * 10 + ones;
         }
 
         private IEnumerable<Fraction> BruteSolve()
         {
             // - there are only a set number of fractions possible in these 'cancellations'
             // - if any digit is zero, or first digits or last digits are shared, then it is trivial and not counted
-            for (char i = '1'; i <= '9'; i++)
+            for (int i = 1; i <= 9; i++)
             {
-                for (char j = (char)(i+1); j <= '9'; j++)
+                for (int j = i+1; j <= 9; j++)
                 {
                     // consider i/j:
                     // this must be part of either ki/jk or ik/kj
 
-                    var ratio = new Fraction(i.ToLong(), j.ToLong()).Reduce();
+                    var ratio = new Fraction(i, j).Reduce();
 
                     // ki/jk
-                    for (char k = '1'; k < j; k++)
+                    for (int k = 1; k < j; k++)
                     {
                         var num = ToLong(k, i);
                         var den = ToLong(j, k);
@@ -125,7 +110,7 @@ namespace Cs.Problems
                     }
 
                     // ik/kj
-                    for (char k = (char)(i+1); k <= '9'; k++)
+                    for (int k = i+1; k <= 9; k++)
                     {
                         var num = ToLong(i, k);
                         var den = ToLong(k, j);
