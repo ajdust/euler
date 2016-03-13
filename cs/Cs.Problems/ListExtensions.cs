@@ -45,6 +45,9 @@ namespace Cs.Problems
                 yield return yieldList;
                 yieldList.Clear();
             }
+
+            if (yieldList.Any())
+                yield return yieldList;
         }
 
         public static IEnumerable<Tuple<long, T>> Enumerate<T>(this IEnumerable<T> objects)

@@ -240,5 +240,12 @@ namespace Cs.Test
             var problem = new Problem032();
             Assert.AreEqual(Answers["32"], problem.Solve());
         }
+
+        [TestMethod]
+        public void IsCorrectProblem033()
+        {
+            var problem = new Problem033();
+            Assert.AreEqual(Answers["33"], problem.Solve());
+        }
     }
 }
