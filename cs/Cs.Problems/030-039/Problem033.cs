@@ -13,7 +13,7 @@ namespace Cs.Problems
             { '5', 5 }, { '6', 6 }, { '7', 7 }, { '8', 8 }, { '9', 9 }
         });
 
-        public static long Tolong(this char c)
+        public static long ToLong(this char c)
         {
             return Digit[c];
         }
@@ -35,14 +35,27 @@ namespace Cs.Problems
     /// </summary>
     public class Problem033 : IProblem
     {
-        public static IEnumerable<long> CommonFactors(long a, long b)
+        public static long GetGreatestCommonFactor(long a, long b)
         {
-            var commonFactors = new HashSet<long>(Sequences.GetPrimeFactors(a));
-            commonFactors.IntersectWith(Sequences.GetPrimeFactors(b));
-            return commonFactors;
+            var aPrimeFactors = Sequences.GetPrimeFactors(a).GroupBy(x => x).ToDictionary(x => x.Key, x => x.Count());
+            var bPrimeFactors = Sequences.GetPrimeFactors(b).GroupBy(x => x).ToDictionary(x => x.Key, x => x.Count());
+
+            // collect the factors between the two, similar to Problem005,
+            // except this time pool the shared minimums
+            var minCount = new Dictionary<long, int>();
+            foreach (var factor in aPrimeFactors.Concat(bPrimeFactors))
+            {
+                if (aPrimeFactors.ContainsKey(factor.Key) && bPrimeFactors.ContainsKey(factor.Key))
+                    minCount[factor.Key] = minCount.ContainsKey(factor.Key)
+                      ? Math.Min(minCount[factor.Key], factor.Value)
+                      : factor.Value;
+            }
+
+            return minCount.Aggregate<KeyValuePair<long, int>, long>(
+                1, (current, factor) => current * (long)Math.Pow(factor.Key, factor.Value));
         } 
 
-        private struct Fraction
+        private struct Fraction : IEquatable<Fraction>
         {
             public Fraction(long numerator, long denominator)
             {
@@ -55,19 +68,35 @@ namespace Cs.Problems
 
             public Fraction Reduce()
             {
-                var biggestCommonFactor = CommonFactors(Numerator, Denominator).Max();
-                return new Fraction(Numerator/biggestCommonFactor, Denominator/biggestCommonFactor);
+                var greatestCommonFactor = GetGreatestCommonFactor(Numerator, Denominator);
+                return new Fraction(Numerator/greatestCommonFactor, Denominator/greatestCommonFactor);
             }
 
             public static Fraction operator *(Fraction left, Fraction right)
             {
                 return new Fraction(left.Numerator*right.Numerator, left.Denominator*right.Denominator);
             }
+
+            public bool Equals(Fraction other)
+            {
+                return Numerator == other.Numerator
+                       && Denominator == other.Denominator;
+            }
+
+            public static bool operator ==(Fraction left, Fraction right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(Fraction left, Fraction right)
+            {
+                return !left.Equals(right);
+            }
         }
 
-        private long Tolong(char tens, char ones)
+        private long ToLong(char tens, char ones)
         {
-            return tens.Tolong() * 10 + ones.Tolong();
+            return tens.ToLong() * 10 + ones.ToLong();
         }
 
         private IEnumerable<Fraction> BruteSolve()
@@ -81,27 +110,29 @@ namespace Cs.Problems
                     // consider i/j:
                     // this must be part of either ki/jk or ik/kj
 
-                    var ratio = Convert.ToDouble(i.Tolong()) / Convert.ToDouble(j.Tolong());
+                    var ratio = new Fraction(i.ToLong(), j.ToLong()).Reduce();
 
                     // ki/jk
                     for (char k = '1'; k < j; k++)
                     {
-                        var num = Tolong(k, i);
-                        var den = Tolong(j, k);
-                        if (Convert.ToDouble(num)/Convert.ToDouble(den) == ratio)
+                        var num = ToLong(k, i);
+                        var den = ToLong(j, k);
+                        var fraction = new Fraction(num, den);
+                        if (fraction.Reduce() == ratio)
                         {
-                            yield return new Fraction(num, den);
+                            yield return fraction;
                         }
                     }
 
                     // ik/kj
                     for (char k = (char)(i+1); k <= '9'; k++)
                     {
-                        var num = Tolong(i, k);
-                        var den = Tolong(k, j);
-                        if (Convert.ToDouble(num) / Convert.ToDouble(den) == ratio)
+                        var num = ToLong(i, k);
+                        var den = ToLong(k, j);
+                        var fraction = new Fraction(num, den);
+                        if (fraction.Reduce() == ratio)
                         {
-                            yield return new Fraction(num, den);
+                            yield return fraction;
                         }
                     }
                 }
