@@ -75,6 +75,7 @@
     <Compile Include="030-039\Problem032.cs" />
     <Compile Include="030-039\Problem033.cs" />
     <Compile Include="030-039\Problem034.cs" />
+    <Compile Include="030-039\Problem035.cs" />
     <Compile Include="IProblem.cs" />
     <Compile Include="ListExtensions.cs" />
     <Compile Include="MainProgram.cs" />
