@@ -49,7 +49,7 @@ namespace Cs.Problems
         public string Solve()
         {
             var palindromesBothDecimalAndBinary = PalindromesUnderOneMillion()
-                .Where(x => IsPalindrome(x, 10) && IsPalindrome(x, 2));
+                .Where(x => IsPalindrome(x, 2));
             return palindromesBothDecimalAndBinary.Sum().ToString();
         }
     }
