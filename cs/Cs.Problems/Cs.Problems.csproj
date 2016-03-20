@@ -82,6 +82,7 @@
     <Compile Include="ListExtensions.cs" />
     <Compile Include="MainProgram.cs" />
     <Compile Include="NumberExtensions.cs" />
+    <Compile Include="Permutations.cs" />
     <Compile Include="Primes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resources.cs" />

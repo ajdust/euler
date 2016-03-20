@@ -20,54 +20,6 @@ namespace Cs.Problems
     /// </summary>
     public class Problem032 : IProblem
     {
-        // Permute logic should ideally exist in a library, not here
-        #region Permutations
-        public IEnumerable<char[]> Permute(char[] characters)
-        {
-            yield return characters;
-            while (NextPermutation(characters))
-                yield return characters;
-        }
-
-        /// https://github.com/eoincampbell/combinatorics/blob/master/Combinatorics.Net40/Collections/Permutations.cs
-        /// http://www.cut-the-knot.org/do_you_know/AllPerm.shtml
-        private bool NextPermutation(char[] characters)
-        {
-            int i = characters.Length - 1;
-            while (characters[i-1] >= characters[i])
-            {
-                i--;
-                if (i == 0)
-                    return false;
-            }
-
-            int j = characters.Length;
-            while (characters[j-1] <= characters[i-1])
-            {
-                j--;
-            }
-
-            Swap(characters, i-1, j-1);
-            i++;
-            j = characters.Length;
-            while (i < j)
-            {
-                Swap(characters, i-1, j-1);
-                i++;
-                j--;
-            }
-
-            return true;
-        }
-
-        public void Swap(char[] a, int i, int j)
-        {
-            char c = a[i];
-            a[i] = a[j];
-            a[j] = c;
-        }
-        #endregion
-
         private IEnumerable<Tuple<int,int,int>> FindValidProducts(ICollection<char> digits)
         {
             var sdigits = string.Join("", digits);
@@ -84,7 +36,7 @@ namespace Cs.Problems
 
         private IEnumerable<IList<char>> PandigitalPermutations()
         {
-            return Permute(new [] { '1', '2', '3', '4', '5', '6', '7', '8', '9' });
+            return Combinatorics.PermuteForward(new [] { '1', '2', '3', '4', '5', '6', '7', '8', '9' });
         }
 
         private HashSet<Tuple<int,int,int>> CalculatePandigitalProducts()
