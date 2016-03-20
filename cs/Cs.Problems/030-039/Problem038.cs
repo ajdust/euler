@@ -20,13 +20,6 @@ namespace Cs.Problems
     /// </summary>
     public class Problem038 : IProblem
     {
-        public IEnumerable<int> PandigitalNumbers()
-        {
-            return Combinatorics
-                .PermuteBackward(new[] { '9', '8', '7', '6', '5', '4', '3', '2', '1' })
-                .Select(x => Convert.ToInt32(new string(x)));
-        }
-
         private int HasConcatenatedPandigital(int n)
         {
             var digits = new List<char>(12);
