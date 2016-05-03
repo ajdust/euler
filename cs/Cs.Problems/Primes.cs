@@ -127,14 +127,32 @@ namespace Cs.Problems
             for (var i = 0; i < _primeByteUpperBound; i++, byteStart += 8)
             {
                 var b = _bitmap[i];
-                if ((b & 0x01) > 0) yield return (byteStart + 0);
-                if ((b & 0x02) > 0) yield return (byteStart + 1);
-                if ((b & 0x04) > 0) yield return (byteStart + 2);
-                if ((b & 0x08) > 0) yield return (byteStart + 3);
-                if ((b & 0x10) > 0) yield return (byteStart + 4);
-                if ((b & 0x20) > 0) yield return (byteStart + 5);
-                if ((b & 0x40) > 0) yield return (byteStart + 6);
-                if ((b & 0x80) > 0) yield return (byteStart + 7);
+                if ((b & 0x01) > 0) yield return byteStart + 0;
+                if ((b & 0x02) > 0) yield return byteStart + 1;
+                if ((b & 0x04) > 0) yield return byteStart + 2;
+                if ((b & 0x08) > 0) yield return byteStart + 3;
+                if ((b & 0x10) > 0) yield return byteStart + 4;
+                if ((b & 0x20) > 0) yield return byteStart + 5;
+                if ((b & 0x40) > 0) yield return byteStart + 6;
+                if ((b & 0x80) > 0) yield return byteStart + 7;
+            }
+        }
+
+        public IEnumerable<int> PrimesListBackwards()
+        {
+            if (!_calculated) CalculatePrimes();
+            var byteStart = (_primeByteUpperBound - 1)*8;
+            for (var i = _primeByteUpperBound - 1; i >= 0; i--, byteStart -= 8)
+            {
+                var b = _bitmap[i];
+                if ((b & 0x80) > 0) yield return byteStart + 7;
+                if ((b & 0x40) > 0) yield return byteStart + 6;
+                if ((b & 0x20) > 0) yield return byteStart + 5;
+                if ((b & 0x10) > 0) yield return byteStart + 4;
+                if ((b & 0x08) > 0) yield return byteStart + 3;
+                if ((b & 0x04) > 0) yield return byteStart + 2;
+                if ((b & 0x02) > 0) yield return byteStart + 1;
+                if ((b & 0x01) > 0) yield return byteStart + 0;
             }
         }
     }
