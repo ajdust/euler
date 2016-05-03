@@ -82,6 +82,7 @@
     <Compile Include="030-039\Problem039.cs" />
     <Compile Include="040-049\Problem040.cs" />
     <Compile Include="040-049\Problem041.cs" />
+    <Compile Include="040-049\Problem042.cs" />
     <Compile Include="IProblem.cs" />
     <Compile Include="ListExtensions.cs" />
     <Compile Include="MainProgram.cs" />
@@ -94,6 +95,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Problem022_names.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Problem042_words.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
