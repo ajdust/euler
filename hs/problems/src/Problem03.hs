@@ -1,5 +1,8 @@
 module Problem03 (solve) where
 
+import qualified Data.Vector.Unboxed as U
+import qualified Data.Set as S
+
 -- Author: Aaron Johnson
 -- Date: 2016-05-17
 -- My first prime finding algorithm in Haskell!
@@ -10,62 +13,53 @@ module Problem03 (solve) where
 -- What is the largest prime factor of the number 600851475143 ?
 -- </summary>
 
+data PrimeState = PrimeState {
+    primeIndex :: Int,
+    primeVector :: U.Vector Int
+} deriving (Show)
 
-get_lastsieve siever = fst siever
-get_prime siever = snd siever
+-- 1) Make init -- 2 is presieved
+getInitVector :: Int -> U.Vector Int
+getInitVector upTo = U.generate (upTo `quot` 2 - 1) (\x -> x*2+3)
 
--- given a target, t, and a cur_value and a step, step until you reach or pass the target
-get_next target lastsieve prime = until (>=target) (+prime) lastsieve
+-- 2) Filter vector with a prime
+primeSieve :: U.Vector Int -> Int -> U.Vector Int
+primeSieve v prime =
+    let lim = U.last v
+        cut = S.fromList [prime*2, prime*3.. lim]
+    in U.filter (\s -> s `S.notMember` cut) v
 
-get_next_siever target siever =
-	let lastsieve = get_lastsieve siever
-	    prime = get_prime siever
-	in (get_next target lastsieve prime, prime)
+-- 3) Given an index and a vector, sieve the vector with the value at the index
+autoSieve :: PrimeState -> PrimeState
+autoSieve state
+    | pindex >= vlen = PrimeState { primeIndex = vlen, primeVector = v }
+    | otherwise =
+        let p = v U.! pindex
+            sieved = primeSieve v p
+        in autoSieve (PrimeState { primeIndex = pindex + 1, primeVector = sieved})
+    where v = primeVector state
+          vlen = U.length v
+          pindex = primeIndex state
 
-get_next_sievers target sievers = map (\sieve -> get_next_siever target sieve) sievers
+getPrimesUnder :: Int -> U.Vector Int
+getPrimesUnder num =
+    let init = getInitVector num
+        primes = primeVector (autoSieve PrimeState { primeIndex = 0, primeVector = init })
+    in U.cons 2 primes
 
-all_exceed_target target sievers = all (>target) (map get_lastsieve sievers)
+this `evenlyDivides` that = that `mod` this == 0
 
-get_target_sieves target sievers =
-	let targetsievers = get_next_sievers target sievers
-	    is_prime = all_exceed_target target targetsievers
-	in if is_prime then (target, target) : targetsievers else targetsievers
-
-get_target_sieves_and_next_target sievers_and_target =
-	let sievers = fst sievers_and_target
-	    target = snd sievers_and_target
-	in (get_target_sieves target sievers, target + 2)
-
-get_until_new_primes_count target sievers count_bigger_by =
-	let count = (length sievers) + count_bigger_by
-	in until (\x -> length (fst x) > count) get_target_sieves_and_next_target (sievers, target)
-
-get_until_new_primes_bigger target sievers bigger_by =
-	until (\x -> (get_prime $ head (fst x)) > bigger_by) get_target_sieves_and_next_target (sievers, target)
-
-extract_primes sievers_and_target = map snd (fst (sievers_and_target))
-
-get_primes number =
-	if number <= 5 then reverse $ take number [11, 7, 5, 3, 2]
-	else let result = get_until_new_primes_count 13 [(11,11),(7,7),(5,5),(3,3),(2,2)] (number - 5)
-		 in extract_primes result
-
-get_primes_under number =
-	let result = get_until_new_primes_bigger 13 [(11,11),(7,7),(5,5),(3,3),(2,2)] (number - 5)
-	in extract_primes result
-
-this `evenly_divides` that = that `mod` this == 0
-
-get_prime_factors :: Integral a => a -> [a]
-get_prime_factors number =
-	let primes = get_primes_under (number `quot` 2)
-	    stop = (\(current_value, _, _, _) -> current_value <= 1)
-	    divider (v, _, [], []) = (1, v, [v], [])
-	    divider (cur_value, cur_prime, aggregator, primes) =
-	    	if cur_prime `evenly_divides` cur_value then (cur_value `quot` cur_prime, cur_prime, cur_prime : aggregator, primes)
-	    	else (cur_value, head primes, aggregator, tail primes)
-	    result = until stop divider (number, head primes, [], tail primes)
-	in (\(_, _, v, _) -> v) result
+-- todo: to solve the problem, getting primes under 300 billion is not necessary; make the primes lazy
+getPrimeFactors :: Int -> [Int]
+getPrimeFactors number =
+    let primes = getPrimesUnder (number `quot` 2 + 1)
+        divider (v, p, agg, primes)
+            | p `evenlyDivides` v  = (v `quot` p, p, p : agg, primes)
+            | U.length primes == 1 && length agg == 0 = (1, v, [v], primes)
+            | otherwise            = (v, U.head primes, agg, U.tail primes)
+        stop = (\(v, _, _, _) -> v <= 1)
+        result = until stop divider (number, U.head primes, [], U.tail primes)
+    in (\(_, _, v, _) -> v) result
 
 solve :: Integer
 solve = 23
