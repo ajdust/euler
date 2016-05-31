@@ -2,6 +2,8 @@ module Problem03 (solve) where
 
 import qualified Data.Vector.Unboxed as U
 import qualified Data.Set as S
+import qualified Data.List as L
+import qualified Data.Map as M
 
 -- Author: Aaron Johnson
 -- Date: 2016-05-17
@@ -14,8 +16,8 @@ import qualified Data.Set as S
 -- </summary>
 
 data PrimeState = PrimeState {
-    primeIndex :: Int,
-    primeVector :: U.Vector Int
+    unsieved :: U.Vector Int,
+    primes :: M.Map Int Int
 } deriving (Show)
 
 -- 1) Make init -- 2 is presieved
@@ -23,29 +25,29 @@ getInitVector :: Int -> U.Vector Int
 getInitVector upTo = U.generate (upTo `quot` 2 - 1) (\x -> x*2+3)
 
 -- 2) Filter vector with a prime
-primeSieve :: U.Vector Int -> Int -> U.Vector Int
-primeSieve v prime =
+primeSieve :: U.Vector Int -> Int -> Int -> (U.Vector Int, Int)
+primeSieve v prime startingAt =
     let lim = U.last v
-        cut = S.fromList [prime*2, prime*3.. lim]
-    in U.filter (\s -> s `S.notMember` cut) v
+        cut = S.fromList [startingAt, startingAt + prime.. lim]
+    in (U.filter (\s -> s `S.notMember` cut) v, S.findMax cut)
 
--- 3) Given an index and a vector, sieve the vector with the value at the index
+-- 3) Given a prime map and an unsieved vector, assume the first element is a prime,
+--    sieve the vector with it and pull it into the primes list
 autoSieve :: PrimeState -> PrimeState
 autoSieve state
-    | pindex >= vlen = PrimeState { primeIndex = vlen, primeVector = v }
+    | U.length u == 0 = PrimeState { primes = ps, unsieved = u }
     | otherwise =
-        let p = v U.! pindex
-            sieved = primeSieve v p
-        in autoSieve (PrimeState { primeIndex = pindex + 1, primeVector = sieved})
-    where v = primeVector state
-          vlen = U.length v
-          pindex = primeIndex state
+        let p       = U.head u
+            (psieved, biggest) = primeSieve u p p
+        in autoSieve PrimeState { unsieved = psieved, primes = M.insert p biggest ps }
+    where ps = primes state
+          u = unsieved state
 
-getPrimesUnder :: Int -> U.Vector Int
+getPrimesUnder :: Int -> [Int]
 getPrimesUnder num =
     let init = getInitVector num
-        primes = primeVector (autoSieve PrimeState { primeIndex = 0, primeVector = init })
-    in U.cons 2 primes
+        pkeys = M.keys $ primes (autoSieve PrimeState { primes = M.singleton 2 2, unsieved = init })
+    in pkeys
 
 this `evenlyDivides` that = that `mod` this == 0
 
@@ -53,12 +55,12 @@ this `evenlyDivides` that = that `mod` this == 0
 getPrimeFactors :: Int -> [Int]
 getPrimeFactors number =
     let primes = getPrimesUnder (number `quot` 2 + 1)
-        divider (v, p, agg, primes)
+        divide (v, p, agg, primes)
             | p `evenlyDivides` v  = (v `quot` p, p, p : agg, primes)
-            | U.length primes == 1 && length agg == 0 = (1, v, [v], primes)
-            | otherwise            = (v, U.head primes, agg, U.tail primes)
+            | L.length primes == 1 && length agg == 0 = (1, v, [v], primes)
+            | otherwise            = (v, L.head primes, agg, tail primes)
         stop = (\(v, _, _, _) -> v <= 1)
-        result = until stop divider (number, U.head primes, [], U.tail primes)
+        result = until stop divide (number, L.head primes, [], L.tail primes)
     in (\(_, _, v, _) -> v) result
 
 solve :: Integer
