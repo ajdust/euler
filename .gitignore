@@ -14,3 +14,8 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 .DS_Store
+
+# Vim
+tags
+.*.swp
+.*.swo
