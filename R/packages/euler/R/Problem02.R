@@ -9,7 +9,6 @@
 # four million, find the sum of the even-valued terms.
 
 problem02 <- function() {
-
 	current <- c(0,1)
 	total <- 0
 	while (current[1] < 4e+6) {
@@ -22,4 +21,24 @@ problem02 <- function() {
 	total
 }
 
+fib <- function() {
+	fib_ <- function(a) {
+	    val_ <- c(a[2], a[1] + a[2])
+	    next_ <- function() { fib_(val_) }
+	    list(movenext=next_, value=(val_[1]))
+	}
+	fib_(c(0,1))
+}
 
+problem02_alt <- function() {
+	current = fib()
+	total <- 0
+	while (current$value < 4e+06) {
+		if (current$value %% 2 == 0) {
+			total <- total + current$value
+		}
+		current <- current$movenext()
+	}
+
+	total
+}
