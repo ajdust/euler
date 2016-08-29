@@ -9,11 +9,9 @@ import qualified Data.Map as M
 -- Date: 2016-05-17
 -- My first prime finding algorithm in Haskell!
 
--- <title>Largest prime factor</title>
--- <summary>
+-- Largest prime factor
 -- The prime factors of 13195 are 5, 7, 13 and 29.
 -- What is the largest prime factor of the number 600851475143 ?
--- </summary>
 
 data PrimeState = PrimeState {
     unsieved :: U.Vector Int,
@@ -62,7 +60,6 @@ getPrimesUnder num =
         pkeys = M.keys $ primes (autoSieve PrimeState { primes = M.singleton 2 2, unsieved = init, pulled = [] })
     in pkeys
 
--- something like::::
 getPrimes :: [Int]
 getPrimes =
     let getMore i state =
@@ -72,7 +69,6 @@ getPrimes =
                 newState = autoSieve PrimeState { primes = psUpdated, unsieved = presieved, pulled = [] }
             in together (reverse puls) (getMore (i + 1) newState)
     in 2 : getMore 1 (autoSieve PrimeState { primes = M.empty, unsieved = getInitVector 1000 0, pulled = [] })
-    -- initial : more
 
 this `evenlyDivides` that = that `mod` this == 0
 
@@ -93,5 +89,5 @@ getPrimeFactors number =
         primeScan = scanl divideFold ([], number) getPrimes
     in fst $ last (takeWhile (\x -> snd x /= 0) primeScan)
 
-solve :: Int
-solve = head $ getPrimeFactors 600851475143
+solve :: Integer
+solve = toInteger (head $ getPrimeFactors 600851475143)

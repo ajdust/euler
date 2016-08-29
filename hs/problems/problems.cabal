@@ -18,7 +18,10 @@ library
   exposed-modules:     Problem01
                      , Problem02
                      , Problem03
+                     , Problem04
   build-depends:       base >= 4.7 && < 5
+                     , vector
+                     , containers
   default-language:    Haskell2010
 
 executable problems-exe
@@ -36,8 +39,11 @@ test-suite problems-test
   hs-source-dirs:      test
   main-is:             Spec.hs
   build-depends:       base
+                     , bytestring
+                     , containers
                      , problems
                      , hspec >= 1.8
+                     , aeson
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   default-language:    Haskell2010
 
