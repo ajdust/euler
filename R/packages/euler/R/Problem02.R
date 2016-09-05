@@ -23,21 +23,21 @@ problem02 <- function() {
 
 fib <- function() {
 	fib_ <- function(a) {
-	    val_ <- c(a[2], a[1] + a[2])
-	    next_ <- function() { fib_(val_) }
-	    list(movenext=next_, value=(val_[1]))
+	    val <- c(a[2], a[1] + a[2])
+	    list(getnext=function() fib_(val),
+	    	 current=val[1])
 	}
 	fib_(c(0,1))
 }
 
 problem02_alt <- function() {
-	current = fib()
+	fib <- fib()
 	total <- 0
-	while (current$value < 4e+06) {
-		if (current$value %% 2 == 0) {
-			total <- total + current$value
+	while (fib$current < 4e+06) {
+		if (fib$current %% 2 == 0) {
+			total <- total + fib$current
 		}
-		current <- current$movenext()
+		fib <- fib$getnext()
 	}
 
 	total
