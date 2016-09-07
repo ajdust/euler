@@ -19,6 +19,7 @@ library
                      , Problem02
                      , Problem03
                      , Problem04
+                     , Problem05
   build-depends:       base >= 4.7 && < 5
                      , vector
                      , containers

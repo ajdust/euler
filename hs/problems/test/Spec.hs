@@ -9,6 +9,7 @@ import Problem01
 import Problem02
 import Problem03
 import Problem04
+import Problem05
 
 getJSON :: IO B.ByteString
 getJSON = B.readFile "../../answers.json"
@@ -48,3 +49,7 @@ main = do
         describe "Validate Problem04" $ do
             it "Problem04 solve should be correct" $ do
                 Problem04.solve `shouldBe` (answerFor "4")
+
+        describe "Validate Problem05" $ do
+            it "Problem05 solve should be correct" $ do
+                Problem05.solve `shouldBe` (answerFor "5")
