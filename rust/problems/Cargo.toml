@@ -1,0 +1,8 @@
+[package]
+name = "problems"
+version = "0.1.0"
+authors = ["aaron"]
+
+[dependencies]
+serde = "0.8"
+serde_json = "0.8"
