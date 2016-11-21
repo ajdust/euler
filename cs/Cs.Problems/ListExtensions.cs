@@ -59,6 +59,5 @@ namespace Cs.Problems
                 count++;
             }
         }
-
     }
 }
