@@ -1,14 +1,15 @@
-module Problem05 (solve, countNumbers, commonPrimeFactors) where
-import Problem03 (primeFactors)
+{-
+Smallest multiple
 
--- Smallest multiple
--- 2520 is the smallest number that can be divided by each of the numbers from 1 to 10 without any remainder.
--- What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?
-
+2520 is the smallest number that can be divided by each of the numbers from 1 to 10 without any remainder.
+What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?
+-}
 
 -- To solve this problem, we need the number with the minimum set of
 -- prime factors necessary to create each number from 1 to 20.
 
+module Problem05 (solve, countNumbers, commonPrimeFactors) where
+import Problem03 (primeFactors)
 import qualified Data.Map as Map
 
 -- This function is probably generic and built in.

@@ -11,6 +11,11 @@ import Problem03
 import Problem04
 import Problem05
 import Problem06
+import Problem07
+import Problem08
+import Problem09
+import Problem10
+import Problem11
 
 getJSON :: IO B.ByteString
 getJSON = B.readFile "../../answers.json"
@@ -56,5 +61,26 @@ main = do
                 Problem05.solve `shouldBe` (answerFor "5")
 
         describe "Validate Problem06" $ do
-            it "Probelem06 solve should be correct" $ do
+            it "Problem06 solve should be correct" $ do
                 Problem06.solve `shouldBe` (answerFor "6")
+
+        describe "Validate Problem07" $ do
+            it "Problem07 solve should be correct" $ do
+                Problem07.solve `shouldBe` (answerFor "7")
+
+        describe "Validate Problem08" $ do
+            it "Problem08 solve should be correct" $ do
+                Problem08.solve `shouldBe` (answerFor "8")
+
+        describe "Validate Problem09" $ do
+            it "Problem09 solve should be correct" $ do
+                Problem09.solve `shouldBe` (answerFor "9")
+
+        describe "Validate Problem10" $ do
+            it "Problem10 solve should be correct" $ do
+                Problem10.solve `shouldBe` (answerFor "10")
+
+        describe "Validate Problem11" $ do
+            it "Problem11 solve should be correct" $ do
+                Problem11.solve `shouldBe` (answerFor "11")
+

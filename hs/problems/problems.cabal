@@ -21,9 +21,16 @@ library
                      , Problem04
                      , Problem05
                      , Problem06
+                     , Problem07
+                     , Problem08
+                     , Problem09
+                     , Problem10
+                     , Problem11
   build-depends:       base >= 4.7 && < 5
                      , vector
                      , containers
+                     , split
+                     , text
   default-language:    Haskell2010
 
 executable problems-exe
