@@ -1,0 +1,1 @@
+Rscript ./runtests.R

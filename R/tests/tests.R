@@ -17,3 +17,7 @@ problem02_is_correct <- function() {
 problem03_is_correct <- function() {
 	checkEquals(ans$`3`, problem03())
 }
+
+problem04_is_correct <- function() {
+	checkEquals(ans$`4`, problem04())
+}
