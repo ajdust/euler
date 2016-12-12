@@ -91,6 +91,7 @@
     <Compile Include="040-049\Problem049.cs" />
     <Compile Include="040-049\Problem048.cs" />
     <Compile Include="050-059\Problem050.cs" />
+    <Compile Include="050-059\Problem051.cs" />
     <Compile Include="IProblem.cs" />
     <Compile Include="ListExtensions.cs" />
     <Compile Include="MainProgram.cs" />
