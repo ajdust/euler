@@ -21,35 +21,6 @@ namespace Cs.Problems
     /// </summary>
     public class Problem051 : IProblem
     {
-        private IDictionary<int, IEnumerable<int[]>> _memoIndexes = new Dictionary<int, IEnumerable<int[]>>();
-
-        // A way to obtain all possible 'replacement positions' for a certain length
-        private IEnumerable<int[]> GetReplacementIndexes(int length)
-        {
-            if (_memoIndexes.ContainsKey(length))
-                return _memoIndexes[length];
-
-            var indexesList = new List<int[]>();
-            for (var size = 1; size <= length; size++)
-            {
-                var positions = new char[length];
-                for (var i = 0; i < length; i++)
-                    positions[i] = i < size ? '1' : '0';
-                Array.Sort(positions);
-
-                foreach (var combo in Combinatorics.PermuteForward(positions))
-                {
-                    indexesList.Add(combo
-                        .Select((x, i) => x == '1' ? i : -1)
-                        .Where(x => x >= 0)
-                        .ToArray());
-                }
-            }
-
-            _memoIndexes[length] = indexesList;
-            return indexesList;
-        }
-
         private IEnumerable<int[]> GetReplacementIndexesForPrime(int prime)
         {
             return prime.ToString().ToCharArray()
