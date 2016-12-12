@@ -29,7 +29,6 @@ impl Iterator for Primes {
     type Item = i64;
     fn next(&mut self) -> Option<Self::Item> {
 
-        // original...
         while let Some(prime) = get_match_copy(&self.sieve, &self.n) {
             // don't need this key - remove it to save space
             self.sieve.remove(&self.n);
@@ -41,7 +40,7 @@ impl Iterator for Primes {
             }
             self.sieve.insert(n_, prime);
 
-            self.n = self.n + 1;
+            self.n += 1;
         }
 
         // add composite in prep for next round

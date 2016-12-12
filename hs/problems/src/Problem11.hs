@@ -106,7 +106,7 @@ get13Adjacent p = [getAdjacent 4 p nextVertical,
 -- finally, iterate through the grid coordinates,
 -- getting each adjacent from the point
 
--- 50 x 20 grid
+-- 20 x 20 grid
 getAll13Adjacent :: [[(Int, Int)]]
 getAll13Adjacent = concat $ map get13Adjacent [(x, y) | x <- [0..19], y <- [0..19]]
 
