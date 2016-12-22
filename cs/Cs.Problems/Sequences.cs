@@ -7,10 +7,6 @@ namespace Cs.Problems
 {
     public class Sequences
     {
-        // memoization for sequences
-        private static List<long> _primes = new List<long>();
-        private static Dictionary<long, List<long>> _primeFactors = new Dictionary<long, List<long>>();
-
         public static IEnumerable<int> Fibonacci()
         {
             int a = 0, b = 1, temp = 0;
@@ -35,34 +31,34 @@ namespace Cs.Problems
             }
         }
 
-        /// <summary>
-        /// A simple generator for primes that uses memoization to reduce stress
-        /// for repeat calls.
-        /// </summary>
-        /// <returns>Prime number from 2 onward.</returns>
         public static IEnumerable<long> Primes()
         {
-            // use the memoized primes
-            if (_primes.Count > 0)
+            yield return 2;
+
+            var n = 3;
+            var composites = new Dictionary<long, long>();
+            long prime;
+
+            while (true)
             {
-                foreach (var prime in _primes)
+                while (composites.TryGetValue(n, out prime))
                 {
-                    yield return prime;
+                    // remove composite n from sieve to save space
+                    composites.Remove(n);
+
+                    // add composite
+                    var check = n + prime + prime;
+                    while (composites.ContainsKey(check))
+                        check += prime + prime;
+                    composites[check] = prime;
+
+                    n += 2;
                 }
-            }
-            else
-            {
-                _primes.Add(2);
-                yield return 2;
-            }
 
-            // continue finding primes
-            var last = _primes[_primes.Count - 1];
-
-            foreach (var n in LongRange(last + 1, long.MaxValue).Where(n => _primes.All(prime => n % prime != 0)))
-            {
-                _primes.Add(n);
+                // add composite for next iteration
+                composites[n * n] = n;
                 yield return n;
+                n += 2;
             }
         }
 
@@ -73,46 +69,22 @@ namespace Cs.Problems
         /// <returns></returns>
         public static List<long> GetPrimeFactors(long n)
         {
-            // use memoized prime factors
-            if (_primeFactors.ContainsKey(n))
-            {
-                return _primeFactors[n];
-            }
-
             var factors = new List<long>();
-            var div = n;
-            var divIsPrime = false;
+            var quotient = n;
 
-            if (n <= 1)
+            foreach (var prime in Primes())
             {
-                return factors;
-            }
+                if (prime > quotient)
+                    break;
 
-            while (true)
-            {
-                // calculate the prime factors of a number by repeatedly finding
-                // the smallest prime factor
-                foreach (var prime in Primes())
+                for (var remainder = quotient % prime; remainder == 0; remainder = quotient % prime)
                 {
-                    if (div == prime)
-                    {
-                        divIsPrime = true;
-                        factors.Add(prime);
-                        break;
-                    }
-                    else if (div % prime == 0)
-                    {
-                        div /= prime;
-                        factors.Add(prime);
-                        break;
-                    }
-                }
-                if (divIsPrime)
-                {
-                    _primeFactors[n] = factors;
-                    return factors;
+                    factors.Add(prime);
+                    quotient /= prime;
                 }
             }
+
+            return factors;
         }
 
         public static IEnumerable<int> Squares()
