@@ -53,3 +53,9 @@ fn problem03_is_correct() {
     let solution = problem03::solve() as i64;
     assert_eq!(answer_for(3), solution);
 }
+
+#[test]
+fn problem04_is_correct() {
+    let solution = problem04::solve() as i64;
+    assert_eq!(answer_for(4), solution);
+}
