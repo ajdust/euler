@@ -128,12 +128,6 @@
 		Find the sum of all the primes below two million.
 	</summary>
 </problem>
-<remarks>
-	This problem calls for a more efficient prime computing algorithm than that of Problem 3.
-	Hence, the Primes class was created here to use the Sieve of Eratosthenes on a bitmap.
-	Ideally, this would call out to some sweet multithreaded C++ DLL to do the dirty work for us.
-	But with a limit of only 2,000,000 C# can do the work.
-</remarks>
 
 <problem>
 	<number>11</number>
