@@ -50,7 +50,7 @@ impl Iterator for Primes {
     }
 }
 
-fn prime_factors(of: i64) -> Vec<i64> {
+pub fn prime_factors(of: i64) -> Vec<i64> {
     let mut pfacts = Vec::new();
     let mut quotient = of;
 
