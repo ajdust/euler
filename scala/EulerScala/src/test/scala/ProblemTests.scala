@@ -4,13 +4,13 @@
 import java.io.File
 import java.util.Scanner
 
-import Problems._
+import problems._
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import org.scalatest._
 
-class ProblemTest extends fixture.FunSuite {
+class ProblemTests extends fixture.FunSuite {
 
   type FixtureParam = Map[String,String]
 
@@ -29,15 +29,54 @@ class ProblemTest extends fixture.FunSuite {
     test(answers)
   }
 
-  test("problem 1 is correct") { answers =>
-    val problem = new Problem001
-    val solution = problem.solve
+  test("1 is correct") { answers =>
+    val solution = new Problem001().solve
     assert(solution === answers("1"))
   }
 
-  test("problem 2 is correct") { answers =>
-    val problem = new Problem002
-    val solution = problem.solve
+  test("2 is correct") { answers =>
+    val solution = new Problem002().solve
     assert(solution === answers("2"))
   }
+
+  test("3 is correct") { answers =>
+    val solution = new Problem003().solve
+    assert(solution === answers("3"))
+  }
+
+  test("4 is correct") { answers =>
+    val solution = new Problem004().solve
+    assert(solution === answers("4"))
+  }
+
+  test("5 is correct") { answers =>
+    val solution = new Problem005().solve
+    assert(solution === answers("5"))
+  }
+
+  test("6 is correct") { answers =>
+    val solution = new Problem006().solve
+    assert(solution === answers("6"))
+  }
+
+  test("7 is correct") { answers =>
+    val solution = new Problem007().solve
+    assert(solution === answers("7"))
+  }
+
+  test("8 is correct") { answers =>
+    val solution = new Problem008().solve
+    assert(solution === answers("8"))
+  }
+
+  test("9 is correct") { answers =>
+    val solution = new Problem009().solve
+    assert(solution === answers("9"))
+  }
+
+  test("10 is correct") { answers =>
+    val solution = new Problem010().solve
+    assert(solution === answers("10"))
+  }
+
 }
