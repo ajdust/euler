@@ -65,3 +65,33 @@ fn problem05_is_correct() {
     let solution = problem05::solve() as i64;
     assert_eq!(answer_for(5), solution);
 }
+
+#[test]
+fn problem06_is_correct() {
+    let solution = problem06::solve() as i64;
+    assert_eq!(answer_for(6), solution);
+}
+
+#[test]
+fn problem07_is_correct() {
+    let solution = problem07::solve() as i64;
+    assert_eq!(answer_for(7), solution);
+}
+
+#[test]
+fn problem08_is_correct() {
+    let solution = problem08::solve() as i64;
+    assert_eq!(answer_for(8), solution);
+}
+
+#[test]
+fn problem09_is_correct() {
+    let solution = problem09::solve() as i64;
+    assert_eq!(answer_for(9), solution);
+}
+
+#[test]
+fn problem10_is_correct() {
+    let solution = problem10::solve() as i64;
+    assert_eq!(answer_for(10), solution);
+}
