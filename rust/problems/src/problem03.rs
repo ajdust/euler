@@ -7,14 +7,15 @@
 
 use std::collections::BTreeMap;
 
-struct Primes {
+pub struct Primes {
     n: i64,
+    last: i64,
     sieve: BTreeMap<i64, i64>
 }
 
 impl Primes {
-    fn new() -> Primes {
-        Primes { n: 2, sieve: BTreeMap::new() }
+    pub fn new() -> Primes {
+        Primes { n: 3, last: 2, sieve: BTreeMap::new() }
     }
 }
 
@@ -34,19 +35,21 @@ impl Iterator for Primes {
             self.sieve.remove(&self.n);
 
             // add composite
-            let mut n_ = self.n + prime;
+            let mut n_ = self.n + prime + prime;
             while self.sieve.contains_key(&n_) {
-                n_ += prime;
+                n_ += prime + prime;
             }
             self.sieve.insert(n_, prime);
 
-            self.n += 1;
+            self.n += 2;
         }
 
         // add composite in prep for next round
         self.sieve.insert(self.n * self.n, self.n);
-        self.n += 1;
-        Some(self.n - 1)
+        let r = Some(self.last);
+        self.last = self.n;
+        self.n += 2;
+        r
     }
 }
 
