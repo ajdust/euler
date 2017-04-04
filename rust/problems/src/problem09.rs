@@ -1,6 +1,8 @@
 /// Aaron Johnson
 /// 2017-01-09
 
+/// Special Pythagorean triplet
+///
 /// A Pythagorean triplet is a set of three natural numbers, a LT b LT c, for which,
 /// a^2 + b^2 = c^2
 ///
