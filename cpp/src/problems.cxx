@@ -226,7 +226,7 @@ bool is_palindrome(std::string s) {
 std::string problem04() {
     int max = 0;
     for (int i = 100; i < 999; i++) {
-        for (int j = 100; i < j; j++) {
+        for (int j = 100; j < i; j++) {
             int prod = i * j;
             if (prod > max && is_palindrome(std::to_string(prod))) {
                 max = prod;
