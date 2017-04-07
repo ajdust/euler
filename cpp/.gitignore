@@ -1,0 +1,4 @@
+build/
+external_lib/*
+*.o
+*.so
