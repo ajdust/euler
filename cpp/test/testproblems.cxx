@@ -39,6 +39,31 @@ TEST_F(ProblemsTest, Problem_5_IsCorrect) {
     EXPECT_EQ(answer, answers["5"]);
 }
 
+TEST_F(ProblemsTest, Problem_6_IsCorrect) {
+    auto answer = Problems::problem06();
+    EXPECT_EQ(answer, answers["6"]);
+}
+
+TEST_F(ProblemsTest, Problem_7_IsCorrect) {
+    auto answer = Problems::problem07();
+    EXPECT_EQ(answer, answers["7"]);
+}
+
+TEST_F(ProblemsTest, Problem_8_IsCorrect) {
+    auto answer = Problems::problem08();
+    EXPECT_EQ(answer, answers["8"]);
+}
+
+TEST_F(ProblemsTest, Problem_9_IsCorrect) {
+    auto answer = Problems::problem09();
+    EXPECT_EQ(answer, answers["9"]);
+}
+
+TEST_F(ProblemsTest, Problem_10_IsCorrect) {
+    auto answer = Problems::problem10();
+    EXPECT_EQ(answer, answers["10"]);
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
