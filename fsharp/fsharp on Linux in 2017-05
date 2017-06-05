@@ -1,0 +1,34 @@
+Overall, once things are setup, F# works reasonably well. The language itself has relatively few flaws, compared to others. Most of the show-stopping problems come about because of the poor tooling surrounding F# on Linux.
+
+The easiest tool to code with F# on Linux appears to be Ionide with Visual Studio Code. Installing F# and using Ionide on Visual Studio Code is pretty nice. It comes with intelligent auto-complete, code recommendations, and on the fly error-underlining. All of this greatly speeds up the development flow - especially for someone new to the language.
+
+## Tooling disappointments
+
+- Creating new project with Ionide didn't include Paket.Boostrapper. I had to download it manually and put it in the `.paket` directory.
+- Even though .NET Core was released years ago, all of this tooling is still tied to Mono.
+- How do I run FsUnit to unit test my F# code? It was confusing. Let's look it up:
+  - A post on StackOverflow gives me a shortlist of options
+    - With Nuget, install a test runner (but I'm using Paket, not Nuget)
+    - Use Xamarin Studio (I'm using Visual Studio Code, not Xamarin Studio)
+    - Use FAKE (why do I need big tool just to run tests)
+      - Compare this to languages like Go, Rust, and Haskell which have `go`, `cargo` and `stack` to build and run tests OOB with ease.
+  - I decide that FAKE is probably the right way to run tests and build.
+    - Now I have to download the FAKE executable.. with Nuget? Not Paket? Downloaded with Nuget.
+    - FAKE error messages could be better. Running FAKE.exe with a simple `-help` gives me a huge exception message. See FAKEHuh.png.
+    - FAKE is FAKE.exe - I have to run it with Mono. The Windows bias (everything has a .exe extension) is a little annoying, but tolerable.
+  - I add a proper Test target to the `build.fsx`, or so I thought. Running `FAKE.exe Test`, I get another big long exception message.
+  - I am over an hour in at this point.
+  - The next day, I switch to Xunit - the FAKE task seems to run, though I don't have results.
+  - Apparently I need `/tools/xunit.runner.console/xunit.console.exe` to be present.
+  - Okay, I put the reference manually in the Paket dependencies and ran `paket restore`, and
+    I specified the `ToolPath` in the `build.fsx` to point to the runner exe.
+  - It took me many minutes, too many, to figure out that FAKE was putting things into a build directory. Tests working, I can finally start coding.
+- No fancy incremental compilation is setup OOB - building everything every time seems a bit slow to do every time I want to run tests. Oh well.
+
+Coding with Ionide is generally pretty nice, as I mentioned. But there is a way to go. Since I don't want to bother with it, I am avoiding F#'s build order requirement by just putting all code into one file.
+
+## Language disappointments:
+
+- I am disappointed I cannot use 'open' inside a function scope, like I can with OCaml. In OCaml, it was rather nice to be able to say, open 'List' just inside a function and not globally so you don't have to refer to it constantly (List.take, List.takeWhile, etc. becomes just take, takeWhile, etc.).
+- Languages with whitespace rules are rather annoying at times. Errors like `Unexpected infix operator in expression` and `Possible incorrect indentation` take me right out of the coding flow. Whitespace error.. Looks indented to me. After programming with the language for a while, I'm sure I would absorb the hidden rules and correct code styles such that I wouldn't encounter a whitespace error. But as a noobie, this kind of thing that gets on my nerves.
+- I am disappointed F# does not support nested type definitions. I use these in C# on occasion, as a sort of private data-structure to the class. In a similar vein, C#'s anonymous types are mildly nicer than tuples.
