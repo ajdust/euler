@@ -1,0 +1,6 @@
+.gradle
+/build
+.idea/
+gradle/
+kt.iml
+settings.gradle
