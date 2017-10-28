@@ -1,0 +1,9 @@
+{
+	"name": "problems",
+	"authors": [
+		"Aaron Johnson"
+	],
+	"description": "A minimal D application to solve project euler problems.",
+	"copyright": "Copyright © 2017, Aaron Johnson",
+	"license": "MIT"
+}

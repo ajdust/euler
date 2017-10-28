@@ -1,7 +1,8 @@
 module eulerTests;
 import problems;
 
-// ran with rdmd -unittest --main tests.d
+// ran with `rdmd -unittest --main tests.d` (add extra '..' to json path)
+// or with `dub test`
 class Tester
 {
     version(unittest)
@@ -11,10 +12,9 @@ class Tester
         import std.stdio;
     }
 
-    /// Problem 1 test
     unittest
     {
-        auto answersJsonText = readText("../answers.json");
+        auto answersJsonText = readText("../../answers.json");
         auto json = parseJSON(answersJsonText);
 
         assert(json["1"].str == problem01());

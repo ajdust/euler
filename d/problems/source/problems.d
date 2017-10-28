@@ -1,6 +1,5 @@
 module problems;
 
-
 import std.stdio;
 import std.conv;
 import std.range;
@@ -37,26 +36,17 @@ import std.array;
 */
 string problem01()
 {
-    int sum = iota(1, 1000)
-        .filter!(v => v % 3 == 0 || v % 5 == 0)
-        .sum();
+    int sum = iota(1, 1000).filter!(v => v % 3 == 0 || v % 5 == 0).sum();
 
     return to!string(sum);
 }
-
 
 auto fibonacci(T)(T a, T b)
 {
     T a_ = a;
     T b_ = b;
     T temp = a;
-    return ()
-    {
-        temp = a_ + b_;
-        a_ = b_;
-        b_ = temp;
-        return a_;
-    };
+    return () { temp = a_ + b_; a_ = b_; b_ = temp; return a_; };
 }
 
 /*
@@ -73,9 +63,7 @@ auto fibonacci(T)(T a, T b)
 string problem02()
 {
     auto fibonacci = generate(fibonacci(0, 1));
-    auto sum = until!(v => v > 4000000)(fibonacci)
-        .filter!(v => v % 2 == 0)
-        .sum();
+    auto sum = until!(v => v > 4000000)(fibonacci).filter!(v => v % 2 == 0).sum();
 
     return to!string(sum);
 }
@@ -85,8 +73,7 @@ auto primes(T)(T type)
     T n = 3;
     T last = 2;
     T[T] sieve;
-    return ()
-    {
+    return () {
         auto prime = sieve.get(n, 0);
         while (prime != 0)
         {
@@ -101,7 +88,7 @@ auto primes(T)(T type)
             prime = sieve.get(n, 0);
         }
 
-        sieve[n*n] = n;
+        sieve[n * n] = n;
         auto t = last;
         last = n;
         n += 2;
@@ -167,12 +154,8 @@ string problem04()
         return true;
     }
 
-    auto matches =
-        iota(101, 999)
-        .map!(i => iota(101, i)
-            .filter!(x => isPalindrome(x * i))
-            .map!(x => x * i))
-        .joiner();
+    auto matches = iota(101, 999).map!(i => iota(101, i)
+            .filter!(x => isPalindrome(x * i)).map!(x => x * i)).joiner();
 
     return to!string(matches.reduce!((a, b) => a > b ? a : b));
 }
@@ -244,10 +227,8 @@ string problem05()
     }
 
     int[] to20 = array(iota(1, 21));
-    long answer = collectCommonFactors(to20)
-        .byKeyValue()
-        .map!(v => pow(v.key, v.value))
-        .reduce!((a, b) => a * b);
+    long answer = collectCommonFactors(to20).byKeyValue().map!(v => pow(v.key,
+            v.value)).reduce!((a, b) => a * b);
 
     return to!string(answer);
 }
@@ -334,12 +315,10 @@ string problem08()
         84580156166097919133875499200524063689912560717606
         05886116467109405077541002256983155200055935729725
         71636269561882670428252483600823257530420752963450
-        `.filter!(v => v >= '0' && v <= '9')
-         .map!(v => to!long(v - '0')));
+        `.filter!(v => v >= '0' && v <= '9').map!(v => to!long(v - '0')));
 
-    auto products = iota(0, digits.length - 14)
-         .map!(v => digits[v .. v + 13]
-                    .reduce!((a, n) => a * n));
+    auto products = iota(0, digits.length - 14).map!(v => digits[v .. v + 13].reduce!((a,
+            n) => a * n));
 
     return to!string(products.reduce!((a, b) => a > b ? a : b));
 }
@@ -357,7 +336,12 @@ string problem08()
 */
 string problem09()
 {
-    struct Square { int _1; int _2; }
+    struct Square
+    {
+        int _1;
+        int _2;
+    }
+
     auto squaresTo1000 = array(iota(1, 1001).map!(v => Square(v, v * v)));
     auto l = squaresTo1000.length;
     Square ans_a;
@@ -366,17 +350,19 @@ string problem09()
     int t = 0;
 
     for (auto c_i = 0; c_i < l; c_i++)
-    for (auto b_i = 0; b_i < c_i; b_i++)
-    for (auto a_i = 0; a_i < b_i; a_i++)
-    {
-        auto c = squaresTo1000[c_i];
-        auto b = squaresTo1000[b_i];
-        auto a = squaresTo1000[a_i];
-        if (a._2 + b._2 == c._2 && 1000 == a._1 + b._1 + c._1)
-        {
-            ans_a = a; ans_b = b; ans_c = c;
-        }
-    }
+        for (auto b_i = 0; b_i < c_i; b_i++)
+            for (auto a_i = 0; a_i < b_i; a_i++)
+            {
+                auto c = squaresTo1000[c_i];
+                auto b = squaresTo1000[b_i];
+                auto a = squaresTo1000[a_i];
+                if (a._2 + b._2 == c._2 && 1000 == a._1 + b._1 + c._1)
+                {
+                    ans_a = a;
+                    ans_b = b;
+                    ans_c = c;
+                }
+            }
 
     return to!string(ans_a._1 * ans_b._1 * ans_c._1);
 }
