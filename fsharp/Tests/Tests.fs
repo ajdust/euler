@@ -1,8 +1,7 @@
-module Tests
+﻿module Tests
 
-open FsUnit
 open Problems
-open Xunit
+open Expecto
 open Newtonsoft.Json
 open System.Collections.Generic
 
@@ -11,57 +10,65 @@ let answers =
     let text = System.IO.File.ReadAllText(path)
     in JsonConvert.DeserializeObject<Dictionary<string,string>>(text)
 
-[<Fact>]
-let ``Problem 1`` () =
-    let p = Problem01 ()
-    in p.Solve () |> should equal answers.["1"]
+[<Tests>]
+let tests =
+    testList "Problems 1 through 11" [
+        test "Problem 1" {
+            let p = Problem01 ()
+            in Expect.equal (p.Solve ()) answers.["1"] "1 is correct."
+        }
 
-[<Fact>]
-let ``Problem 2`` () =
-    let p = Problem02 ()
-    in p.Solve () |> should equal answers.["2"]
+        test "Problem 2" {
+            let p = Problem02 ()
+            in Expect.equal (p.Solve ()) answers.["2"] "2 is correct."
+        }
 
-[<Fact>]
-let ``Problem 3`` () =
-    let p = Problem03 ()
-    in p.Solve () |> should equal answers.["3"]
+        test "Problem 3" {
+            let p = Problem03 ()
+            in Expect.equal (p.Solve ()) answers.["3"] "3 is correct."
+        }
 
-[<Fact>]
-let ``Problem 4`` () =
-    let p = Problem04 ()
-    in p.Solve () |> should equal answers.["4"]
-    
-[<Fact>]
-let ``Problem 5`` () =
-    let p = Problem05 ()
-    in p.Solve () |> should equal answers.["5"]
-    
-[<Fact>]
-let ``Problem 6`` () =
-    let p = Problem06 ()
-    in p.Solve () |> should equal answers.["6"]
-    
-[<Fact>]
-let ``Problem 7`` () =
-    let p = Problem07 ()
-    in p.Solve () |> should equal answers.["7"]
-    
-[<Fact>]
-let ``Problem 8`` () =
-    let p = Problem08 ()
-    in p.Solve () |> should equal answers.["8"]
-    
-[<Fact>]
-let ``Problem 9`` () =
-    let p = Problem09 ()
-    in p.Solve () |> should equal answers.["9"]
-    
-[<Fact>]
-let ``Problem 10`` () =
-    let p = Problem10 ()
-    in p.Solve () |> should equal answers.["10"]
+        test "Problem 4" {
+            let p = Problem04 ()
+            in Expect.equal (p.Solve ()) answers.["4"] "4 is correct."
+        }
+            
+        test "Problem 5" {
+            let p = Problem05 ()
+            in Expect.equal (p.Solve ()) answers.["5"] "5 is correct."
+        }
+            
+        test "Problem 6" {
+            let p = Problem06 ()
+            in Expect.equal (p.Solve ()) answers.["6"] "6 is correct."
+        }
+            
+        test "Problem 7" {
+            let p = Problem07 ()
+            in Expect.equal (p.Solve ()) answers.["7"] "7 is correct."
+        }
+            
+        test "Problem 8" {
+            let p = Problem08 ()
+            in Expect.equal (p.Solve ()) answers.["8"] "8 is correct."
+        }
+            
+        test "Problem 9" {
+            let p = Problem09 ()
+            in Expect.equal (p.Solve ()) answers.["9"] "9 is correct."
+        }
+            
+        test "Problem 10" {
+            let p = Problem10 ()
+            in Expect.equal (p.Solve ()) answers.["10"] "1 is correct."
+        }
 
-[<Fact>]
-let ``Problem 11`` () =
-    let p = Problem11 ()
-    in p.Solve () |> should equal answers.["11"]
+        test "Problem 11" {
+            let p = Problem11 ()
+            in Expect.equal (p.Solve ()) answers.["11"] "1 is correct."
+        }
+    ]
+
+[<EntryPoint>]
+let main argv =
+    Tests.runTestsInAssembly defaultConfig argv

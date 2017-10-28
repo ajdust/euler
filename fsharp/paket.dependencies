@@ -1,8 +1,0 @@
-source https://www.nuget.org/api/v2
-nuget FAKE
-nuget FSharp.Core
-nuget FsUnit
-nuget XUnit
-nuget xunit.runner.console
-nuget FsUnit.xUnit
-nuget Newtonsoft.Json
