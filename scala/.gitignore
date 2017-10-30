@@ -17,5 +17,12 @@ dist/*
 target/
 lib_managed/
 src_managed/
+project/target/
 project/boot/
 project/plugins/project/
+
+# Ensime and VSCode
+.ensime
+ensime-langserver.log
+pc.stdout.log
+.ensime_cache/

@@ -1,10 +1,13 @@
 /**
   * Created by aaron on 8/14/2016.
+  * Run tests with 'sbt test'
   */
+
+import problems._
+
 import java.io.File
 import java.util.Scanner
 
-import problems._
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
@@ -79,4 +82,8 @@ class ProblemTests extends fixture.FunSuite {
     assert(solution === answers("10"))
   }
 
+  test("11 is correct") { answers =>
+    val solution = new Problem011().solve
+    assert(solution === answers("11"))
+  }
 }

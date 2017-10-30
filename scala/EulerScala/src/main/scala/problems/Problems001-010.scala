@@ -98,6 +98,20 @@ class Problem004 extends Problem {
   }
 }
 
+object TraversableExtensions {
+  implicit class Extensions[T](val traversable: Traversable[T]) extends AnyVal {
+    def countBy[TCounted](f: T => TCounted): immutable.Map[TCounted, Int] = {
+      val m = mutable.Map.empty[TCounted, Int]
+      for (elem <- traversable) {
+        val key = f(elem)
+        val count = m.getOrElse(key, 0)
+        m.put(key, count+1)
+      }
+      m.toMap
+    }
+  }
+}
+
 /*
   Smallest multiple
 
@@ -105,39 +119,29 @@ class Problem004 extends Problem {
   What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?
 */
 class Problem005 extends Problem {
-  private def counter[A](s: Seq[A]): immutable.HashMap[A, Int] = {
-    def count(_s: Seq[A], m: immutable.HashMap[A, Int]): immutable.HashMap[A, Int] = {
-      _s match {
-        case Seq() => m
-        case Seq(x, xs@_*) => m.get(x) match {
-          case Some(n) => count(xs, m.updated(x, n + 1))
-          case None => count(xs, m.updated(x, 1))
-        }
+  import TraversableExtensions._
+
+  def countCommonFactors(n: Int): immutable.Map[Long, Int] =
+    Sequences.primeFactors(n).countBy(identity)
+
+  def unionMaps[K](m1: immutable.Map[K, Int], m2: immutable.Map[K, Int]): immutable.Map[K, Int] = {
+    def folder(acc: immutable.Map[K, Int], newKv: Tuple2[K, Int]) = {
+      acc.get(newKv._1) match {
+        case Some(current) if current > newKv._2 => acc
+        case _ => acc + newKv
       }
     }
 
-    count(s, immutable.HashMap.empty)
+    m1.foldLeft(m2)(folder)
   }
 
-  private def countPrimeFactors(n: Long): immutable.HashMap[Long, Int] = counter(Sequences.primeFactors(n))
+  def unionManyMaps[K](ms: Traversable[immutable.Map[K, Int]]) =
+    ms.reduce { (m1,m2) => unionMaps(m1, m2) }
 
-  def commonPrimeFactors(n: Seq[Long]): immutable.Map[Long, Int] = {
-    if (n.isEmpty) {
-      immutable.HashMap.empty
-    } else {
-      val eachPrimeFactors = n.map(countPrimeFactors)
-      eachPrimeFactors.foldLeft(eachPrimeFactors.head)(
-        (pf1: immutable.HashMap[Long, Int], pf2: immutable.HashMap[Long, Int]) => {
-          pf1 ++ pf2.map({ case (k, v) => (k, math.max(v, pf1.getOrElse(k, 0))) })
-        }
-      )
-    }
-  }
-
-  override def solve: String = {
-    val commonPrimeFactors1to20 = commonPrimeFactors(2L to 20L)
-    commonPrimeFactors1to20.foldLeft(1L)({ case (a, (k, v)) => a * BigInt(k).pow(v).toLong }).toString
-  }
+  override def solve: String =
+    unionManyMaps(for { v <- 1 to 20 } yield countCommonFactors(v))
+      .foldLeft(1L) { case (acc, kv) => acc * BigInt(kv._1).pow(kv._2).toLong }
+      .toString()
 }
 
 /*
