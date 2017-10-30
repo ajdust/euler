@@ -27,5 +27,6 @@ class Tester
         assert(json["8"].str == problem08());
         assert(json["9"].str == problem09());
         assert(json["10"].str == problem10());
+        assert(json["11"].str == problem11());
     }
 }
