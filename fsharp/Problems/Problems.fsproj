@@ -8,7 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Problems1-10.fs" />
+    <Compile Include="Sequences.fs" />
+    <Compile Include="IProblem.fs" />
+    <Compile Include="Problems001-010.fs" />
+    <Compile Include="Problems011-020.fs" />
   </ItemGroup>
 
 </Project>
