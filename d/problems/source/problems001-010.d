@@ -6,6 +6,7 @@ import std.range;
 import std.algorithm;
 import std.math;
 import std.array;
+import sequences;
 
 /*
   Multiples of 3 and 5
@@ -41,14 +42,6 @@ string problem01()
     return to!string(sum);
 }
 
-auto fibonacci(T)(T a, T b)
-{
-    T a_ = a;
-    T b_ = b;
-    T temp = a;
-    return () { temp = a_ + b_; a_ = b_; b_ = temp; return a_; };
-}
-
 /*
   Even Fibonacci Numbers
 
@@ -66,59 +59,6 @@ string problem02()
     auto sum = until!(v => v > 4000000)(fibonacci).filter!(v => v % 2 == 0).sum();
 
     return to!string(sum);
-}
-
-auto primes(T)(T type)
-{
-    T n = 3;
-    T last = 2;
-    T[T] sieve;
-    return () {
-        auto prime = sieve.get(n, 0);
-        while (prime != 0)
-        {
-            sieve.remove(n);
-            auto n_ = n + prime + prime;
-            while (n_ in sieve)
-            {
-                n_ += prime + prime;
-            }
-            sieve[n_] = prime;
-            n += 2;
-            prime = sieve.get(n, 0);
-        }
-
-        sieve[n * n] = n;
-        auto t = last;
-        last = n;
-        n += 2;
-        return t;
-    };
-}
-
-T[] primeFactors(T)(T of)
-{
-    auto primes = generate(primes(0));
-    T[] pfacts;
-    T quotient = of;
-
-    foreach (T prime; primes)
-    {
-        if (prime > quotient)
-        {
-            break;
-        }
-
-        auto remainder = quotient % prime;
-        while (remainder == 0)
-        {
-            quotient = quotient / prime;
-            remainder = quotient % prime;
-            pfacts ~= prime;
-        }
-    }
-
-    return pfacts;
 }
 
 /*
@@ -160,6 +100,45 @@ string problem04()
     return to!string(matches.reduce!((a, b) => a > b ? a : b));
 }
 
+
+int[TCounted] countBy(T, TCounted)(T[] elements, TCounted function(T) counted)
+{
+    int[TCounted] m;
+    foreach (T elem; elements)
+    {
+        auto key = counted(elem);
+        auto count = key in m;
+        if (count is null)
+            m[key] = 1;
+        else
+            *count = *count + 1;
+    }
+
+    return m;
+}
+
+T pow(T)(T num, int to)
+{
+    auto n = num;
+    for (int i = 0; i < to - 1; i++)
+        n *= num;
+
+    return n;
+}
+
+unittest
+{
+    int[] r = [1, 2, 2, 3, 3, 4, 2, 1, 9];
+    auto counts = r.countBy((int x) => x);
+
+    assert(counts[1] == 2);
+    assert(counts[2] == 3);
+    assert(counts[3] == 2);
+    assert(counts[4] == 1);
+    assert(counts[9] == 1);
+    assert(counts.keys.length == 5);
+}
+
 /*
   Smallest multiple
 
@@ -167,6 +146,46 @@ string problem04()
   What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?
 */
 string problem05()
+{
+    int[long] countCommonFactors(long n)
+    {
+        return sequences.primeFactors(n).countBy((long x) => x);
+    }
+
+    int[long] unionMaps(int[long] m1, int[long] m2)
+    {
+        int[long] m;
+        foreach (k; m1.keys)
+            m[k] = m1[k];
+        foreach (k; m2.keys)
+        {
+            auto current = k in m;
+            if (current is null)
+                m[k] = m2[k];
+            else if (m2[k] > *current)
+                *current = m2[k];
+        }
+
+        return m;
+    }
+
+    int[long] unionManyMaps(int[long][] ms)
+    {
+        return ms.reduce!(unionMaps);
+    }
+
+    auto factors = unionManyMaps(iota(1, 20)
+        .map!(countCommonFactors)
+        .array);
+    long product = 1L;
+    foreach (kv; factors.byKeyValue())
+        product *= kv.key.pow(kv.value);
+    
+    return product.to!string();
+}
+
+
+string problem05_2()
 {
     int[long] collectCommonFactors(int[] numbers)
     {
@@ -200,30 +219,11 @@ string problem05()
                 else
                 {
                     maxCounts[kv.key] = kv.value;
-                    // you know what error I got with this typo?:
-                    // maxCount[key] = value;
-                    // "Error: only one index allowed to index void"
-                    // That makes no sense whatsoever, and is completely useless!
-                    // oVo
-                    // ===
-                    // I don't care how fast your compiler is if it gives me
-                    // worthless compiler errors!
                 }
             }
         }
 
         return maxCounts;
-    }
-
-    T pow(T)(T num, int to)
-    {
-        auto n = num;
-        for (int i = 0; i < to - 1; i++)
-        {
-            n *= num;
-        }
-
-        return n;
     }
 
     int[] to20 = array(iota(1, 21));
