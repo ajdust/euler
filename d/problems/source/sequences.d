@@ -2,6 +2,7 @@ module sequences;
 
 import std.range;
 import std.algorithm;
+import std.functional;
 
 auto fibonacci(T)(T a, T b)
 {
@@ -11,7 +12,7 @@ auto fibonacci(T)(T a, T b)
     return () { temp = a_ + b_; a_ = b_; b_ = temp; return a_; };
 }
 
-auto primes(T)(T type)
+auto primes(T)()
 {
     T n = 3;
     T last = 2;
@@ -41,7 +42,7 @@ auto primes(T)(T type)
 
 T[] primeFactors(T)(T of)
 {
-    auto primes = generate(primes(0));
+    auto primes = generate(primes!T);
     T[] pfacts;
     T quotient = of;
 
@@ -62,4 +63,20 @@ T[] primeFactors(T)(T of)
     }
 
     return pfacts;
+}
+
+auto triangeNumbers(T)()
+{
+    auto currentN = 1;
+    auto currentTotal = 0;
+    return () {
+        currentTotal += currentN;
+        currentN += 1;
+        return currentTotal;
+    };
+}
+
+auto distinct(T)(T[] ts)
+{
+    return ts.sort().uniq();
 }
