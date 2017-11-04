@@ -6,11 +6,11 @@ import std.file;
 import std.stdio;
 import std.conv;
 
-void main()
-{
-    auto answer = problem12();
-    writeln(answer);
-}
+// void main()
+// {
+//     auto answer = problem12();
+//     writeln(answer);
+// }
 
 // ran with `rdmd -unittest --main tests.d` (add extra '..' to json path)
 // or with `dub test`
