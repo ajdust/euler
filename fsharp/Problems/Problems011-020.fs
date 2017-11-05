@@ -121,18 +121,17 @@ type Problem12 () =
         match memoizedFindFactors.TryGetValue(n) with
         | (true, factors) -> factors
         | (false, _) ->
-            let primeFactors = findPrimeFactors n |> Seq.distinct
-            let factorSet = primeFactors |> hset;
-            factorSet.Add(1L) |> ignore;
-            factorSet.Add(n) |> ignore;
-            let newFactors =
-                primeFactors
-                |> Seq.map (fun prime -> n / prime)
-                |> Seq.filter (fun factor -> factor >= 2L && not (factorSet.Contains(factor)))
-                |> Seq.collect findFactors
-            Seq.iter (fun factor -> factorSet.Add(factor) |> ignore) newFactors;
-            memoizedFindFactors.[n] <- factorSet;
-            factorSet
+            let fs = findFactors_ n
+            memoizedFindFactors.Add(n, fs);
+            fs
+    and findFactors_ n : HashSet<int64> =
+        let pfs = findPrimeFactors n
+        pfs.UnionWith(hset [1L; n]);
+        let factorSet = hset pfs in
+            pfs
+            |> Seq.map (fun prime -> n / prime)
+            |> Seq.filter (fun factor -> factor >= 2L && not (factorSet.Contains(factor)))
+            |> Seq.fold (fun acc subfactor -> acc.UnionWith(findFactors subfactor); acc) factorSet
 
     member this.Solve () =
         let mutable next = 10000L;
