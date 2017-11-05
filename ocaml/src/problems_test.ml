@@ -59,6 +59,19 @@ let test_problem10 context =
     let actual = Problems.problem10 () in
     assert_equal expected actual ~msg:(ne_msg expected actual)
 
+let test_problem11 context =
+    let expected = answer 11 in
+    let actual = Problems.problem11 () in
+    assert_equal expected actual ~msg:(ne_msg expected actual)
+
+let test_problem12 context =
+    let expected = answer 12 in
+    let actual = Problems.problem12 () in
+    begin
+        Printf.printf "Test 12 passed: got %s" actual;
+        assert_equal expected actual ~msg:(ne_msg expected actual)
+    end
+
 let problem_tests = "test the problems" >:::
 [
   "test problem 1" >:: test_problem01 ;
@@ -71,6 +84,8 @@ let problem_tests = "test the problems" >:::
   "test problem 8" >:: test_problem08 ;
   "test problem 9" >:: test_problem09 ;
   "test problem 10" >:: test_problem10 ;
+  "test problem 11" >:: test_problem11 ;
+  "test problem 12" >:: test_problem12 ;
 ]
 
 let _ = run_test_tt_main problem_tests
