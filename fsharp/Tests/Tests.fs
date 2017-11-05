@@ -60,12 +60,17 @@ let tests =
             
         test "Problem 10" {
             let p = Problem10 ()
-            in Expect.equal (p.Solve ()) answers.["10"] "1 is correct."
+            in Expect.equal (p.Solve ()) answers.["10"] "10 is correct."
         }
 
         test "Problem 11" {
             let p = Problem11 ()
-            in Expect.equal (p.Solve ()) answers.["11"] "1 is correct."
+            in Expect.equal (p.Solve ()) answers.["11"] "11 is correct."
+        }
+
+        test "Problem 12" {
+            let p = Problem12 ()
+            in Expect.equal (p.Solve ()) answers.["12"] "12 is correct."
         }
     ]
 

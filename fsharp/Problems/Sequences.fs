@@ -59,3 +59,12 @@ module Sequences =
               if a2 + b2 = c2 then
                   yield (a, b, c) }
 
+    let TriangleNumbers () = seq {
+        let mutable currentN = 1L
+        let mutable currentTotal = 0L
+        while true do
+            currentTotal <- currentTotal + currentN
+            currentN <- currentN + 1L
+            yield currentTotal
+    }
+
