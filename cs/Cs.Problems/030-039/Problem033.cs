@@ -77,6 +77,18 @@ namespace Cs.Problems
             {
                 return !left.Equals(right);
             }
+
+            public override bool Equals(object obj)
+            {
+                switch (obj)
+                {
+                    case null: return false;
+                    case Fraction f: return Equals(f);
+                    default: return false;
+                }
+            }
+
+            public override int GetHashCode() => 193 ^ this.Numerator.GetHashCode() ^ this.Denominator.GetHashCode();
         }
 
         private long ToLong(long tens, long ones)
