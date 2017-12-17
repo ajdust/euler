@@ -87,8 +87,8 @@ class ProblemTests extends fixture.FunSuite {
     assert(solution === answers("11"))
   }
 
-  // test("12 is correct") { answers =>
-  //   val solution = new Problem012().solve
-  //   assert(solution === answers("12"))
-  // }
+  test("12 is correct") { answers =>
+    val solution = new Problem012().solve
+    assert(solution === answers("12"))
+  }
 }

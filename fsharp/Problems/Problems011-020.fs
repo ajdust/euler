@@ -100,7 +100,6 @@ type Problem11 () =
 /// What is the value of the first triangle number to have over five hundred divisors?
 ///
 /// </summary>
-/// <remarks>Unfinished: some bottleneck is slowing this program down, making it unusable</remarks>
 type Problem12 () =
 
     static let mutable memoizedPrimeFactors = new Dictionary<int64, HashSet<int64>>();
@@ -134,14 +133,9 @@ type Problem12 () =
             |> Seq.fold (fun acc subfactor -> acc.UnionWith(findFactors subfactor); acc) factorSet
 
     member this.Solve () =
-        let mutable next = 10000L;
         memoizedFindFactors.Add(1L, new HashSet<int64>([1L]));
         Sequences.TriangleNumbers ()
-        |> Seq.skipWhile (fun tn ->
-            if tn > next then
-                printfn "%i" tn
-                next <- next + next
-            (findFactors tn).Count < 500)
+        |> Seq.skipWhile (fun tn -> (findFactors tn).Count < 500)
         |> Seq.head
         |> sprintf "%i"
         

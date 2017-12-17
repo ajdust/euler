@@ -104,22 +104,8 @@ class Problem011 extends Problem {
  * We can see that 28 is the first triangle number to have over five divisors.
  *
  * What is the value of the first triangle number to have over five hundred divisors?
- *
- * Note: similar to F#'s problem 12, there seems to be a slowdown somewhere such that this takes 30+ miuntes
  */
 class Problem012 extends Problem {
-  private val memoizedPrimeFactors = mutable.HashMap.empty[Long, mutable.ArrayBuffer[Long]]
-
-  def findPrimeFactors(n: Long): mutable.ArrayBuffer[Long] = {
-    memoizedPrimeFactors.get(n) match {
-      case Some(pfs) => pfs
-      case None => {
-        val pfs = Sequences.primeFactors(n)
-        memoizedPrimeFactors += (n -> pfs)
-        pfs
-      }
-    }
-  }
 
   private val memoizedFactors = mutable.HashMap.empty[Long, mutable.Set[Long]]
 
@@ -135,26 +121,32 @@ class Problem012 extends Problem {
   }
 
   private def findFactors_(n: Long): mutable.Set[Long] = {
-    val pfs = findPrimeFactors(n)
+    val pfs = Sequences.primeFactors(n)
     val factorSet = mutable.Set(pfs :_*)
     factorSet += 1L
     factorSet += n
     pfs.map(prime => n / prime)
        .filter(factor => factor >= 2 && !factorSet.contains(factor))
-       .foldLeft(factorSet) { case (acc, subfactor) => acc.union(findFactors(subfactor)) }
+       .foldLeft(factorSet) { case (acc, subfactor) => acc ++= findFactors(subfactor) }
   }
 
   override def solve: String = {
-    var i = 10000;
+    memoizedFactors += (1L -> mutable.Set(1L))
     Sequences.triangleNumbers
-      .find(tn => {
-        if (tn > i) {
-          println(tn)
-          i = i + i
-        }
+      .find(findFactors(_).size > 500) match {
+        case Some(x) => x.toString
+        case _ => ""
+      }
+  }
 
-        findFactors(tn).size > 500
-      })
-      .toString()
+}
+
+// For tests
+object Program {
+  def main(args: Array[String]): Unit = {
+    println("Starting")
+    val p = new Problem012
+    val a = p.solve
+    println(s"Answer: $a")
   }
 }

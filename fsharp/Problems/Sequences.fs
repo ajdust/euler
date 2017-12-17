@@ -1,6 +1,7 @@
 
 namespace Problems
 
+open System.Collections.Generic
 
 module Sequences =
     let Fibonacci () = seq {
@@ -13,42 +14,37 @@ module Sequences =
             yield b
     }
     let Primes () =
-        let rec addNextComposite n prime sieve =
-            match Map.containsKey n sieve with
-            | true -> addNextComposite (n + prime + prime) prime sieve
-            | false -> Map.add n prime sieve
-        let rec primes n sieve =
-            seq {
-                match Map.tryFind n sieve with
-                | Some prime ->
-                    let gc = Map.remove n sieve
-                    let ac = addNextComposite (n + prime + prime) prime gc
-                    in yield! primes (n + 2L) ac
-                | None ->
-                    let ac = Map.add (n * n) n sieve
-                    yield n
-                    yield! primes (n + 2L) ac
-            }
+        let mutable n = 3L
+        let composites = new Dictionary<int64, int64>()
         in seq {
             yield 2L
-            yield! primes 3L Map.empty
+            while true do
+                while composites.ContainsKey(n) do
+                    let prime = composites.[n]
+                    composites.Remove(n) |> ignore;
+                    let mutable check = n + prime + prime
+                    while composites.ContainsKey(check) do
+                        check <- check + prime + prime
+                    composites.Add(check, prime)
+                    n <- n + 2L
+                composites.[n*n] <- n
+                yield n
+                n <- n + 2L
         }
 
     let PrimeFactors n =
-        let rec pfactors primes n =
-            seq {
-                match Seq.tryHead primes with
-                | None -> failwith "No next prime"
-                | Some prime ->
-                    if prime >= n then
-                        yield prime
-                    elif n % prime = 0L then
-                        yield prime
-                        yield! pfactors primes (n / prime)
-                    else
-                        yield! pfactors (Seq.skip 1 primes) n
-            }
-        in pfactors (Primes ()) n
+        let factors = new List<int64>()
+        let primes = (Primes ()).GetEnumerator()
+        primes.MoveNext() |> ignore;
+        let mutable quotient = n
+        while primes.Current <= quotient do
+            let mutable remainder = quotient % primes.Current
+            while remainder = 0L do
+                quotient <- quotient / primes.Current
+                remainder <- quotient % primes.Current
+                factors.Add(primes.Current)
+            primes.MoveNext() |> ignore
+        factors
 
     let Squares = Seq.initInfinite (fun i -> (i, i * i))
 
