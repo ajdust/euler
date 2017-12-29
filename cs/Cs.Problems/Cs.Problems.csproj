@@ -2,10 +2,11 @@
 
   <PropertyGroup>
     <ProjectGuid>{D8D1651B-8F9E-44B3-B7EE-A0E3E3AC74A0}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <RuntimeFrameworkVersion>2.0.0</RuntimeFrameworkVersion>
-    <NETStandardImplicitPackageVersion>2.0.0</NETStandardImplicitPackageVersion>
+    <NETStandardImplicitPackageVersion>2.0.4</NETStandardImplicitPackageVersion>
+    <ServerGarbageCollection>true</ServerGarbageCollection>
   </PropertyGroup>
 
   <ItemGroup>

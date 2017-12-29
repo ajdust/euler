@@ -31,12 +31,16 @@ namespace Cs.Problems
             }
         }
 
+        private static List<long> primes = new List<long> { 2, 3 };
+        private static Dictionary<long, long> composites = new Dictionary<long, long>();
+
         public static IEnumerable<long> Primes()
         {
-            yield return 2;
+            int i = 0;
+            for (; i < primes.Count; i++)
+                yield return primes[i];
 
-            var n = 3;
-            var composites = new Dictionary<long, long>();
+            var n = primes[i - 1];
             long prime;
 
             while (true)
@@ -57,6 +61,7 @@ namespace Cs.Problems
 
                 // add composite for next iteration
                 composites[n * n] = n;
+                primes.Add(n);
                 yield return n;
                 n += 2;
             }
@@ -69,7 +74,7 @@ namespace Cs.Problems
         /// <returns></returns>
         public static List<long> GetPrimeFactors(long n)
         {
-            var factors = new List<long>();
+            var factors = new List<long>(1);
             var quotient = n;
 
             foreach (var prime in Primes())
@@ -77,10 +82,11 @@ namespace Cs.Problems
                 if (prime > quotient)
                     break;
 
-                for (var remainder = quotient % prime; remainder == 0; remainder = quotient % prime)
+                for (var remainder = quotient % prime;
+                    remainder == 0;
+                    quotient /= prime, remainder = quotient % prime)
                 {
                     factors.Add(prime);
-                    quotient /= prime;
                 }
             }
 

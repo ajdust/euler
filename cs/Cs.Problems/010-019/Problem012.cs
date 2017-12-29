@@ -48,18 +48,19 @@ namespace Cs.Problems
             }
 
             // initialize the factor list to the prime factors and 1 and n
-            var primeFactors = Sequences.GetPrimeFactors(n).Distinct();
+            var primeFactors = Sequences.GetPrimeFactors(n);
             var factorSet = new HashSet<long>(primeFactors) { 1, n };
 
             // divide by primes and recursively determine the factors to be aggregated
-            var newFactors = primeFactors
-                .Select(prime => n / prime)
-                .Where(factor => factor >= 2 && !factorSet.Contains(factor))
-                .SelectMany(GetFactors);
-            foreach (var newFactor in newFactors)
+            foreach (var prime in primeFactors)
             {
-                factorSet.Add(newFactor);
+                var factor = n / prime;
+                if (factor <= 2 || factorSet.Contains(factor))
+                    continue;
+                foreach (var subfactor in GetFactors(factor))
+                    factorSet.Add(subfactor);
             }
+
             FactorsDictionary[n] = factorSet;
             return factorSet;
         }
