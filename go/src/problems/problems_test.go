@@ -1,12 +1,11 @@
 package problems
 
 import (
-	"testing"
-	"io/ioutil"
 	"encoding/json"
+	"io/ioutil"
 	"os"
+	"testing"
 )
-
 
 var answers map[int]string
 
@@ -110,6 +109,24 @@ func TestProblem10(t *testing.T) {
 	answer := Problem10()
 	if answer != answers[10] {
 		t.Error("Found", answer, "expected", answers[10])
+	} else {
+		t.Log("Found " + answer + " successfully")
+	}
+}
+
+func TestProblem11(t *testing.T) {
+	answer := Problem11()
+	if answer != answers[11] {
+		t.Error("Found", answer, "expected", answers[11])
+	} else {
+		t.Log("Found " + answer + " successfully")
+	}
+}
+
+func TestProblem12(t *testing.T) {
+	answer := Problem12()
+	if answer != answers[12] {
+		t.Error("Found", answer, "expected", answers[12])
 	} else {
 		t.Log("Found " + answer + " successfully")
 	}
