@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <set>
 
 namespace Problems {
 
@@ -115,77 +116,55 @@ std::string problem02() {
  * What is the largest prime factor of the number 600851475143 ?
  */
 class Primes {
+private:
+    long n;
+    long last;
+    std::map<long, long> sieve;
 public:
-    class iterator : public std::iterator<
-        std::input_iterator_tag, long, long, const long*, long> {
-        long n = 3;
-        long last = 2;
-        std::map<long, long> sieve;
-        bool is_end = false;
-    public:
-        explicit iterator(bool _is_end = false) : is_end(_is_end) {}
 
-        iterator& operator++() {
-
-            // check for presence of composite
-            auto it = sieve.find(n);
-            while (it != sieve.end()) {
-
-                // save space by removing key we've moved past
-                sieve.erase(it);
-                auto prime = it->second;
-
-                // add composites for this prime
-                long n_ = n + prime + prime;
-                while (sieve.find(n_) != sieve.end()) {
-                    n_ += prime + prime;
-                }
-                sieve[n_] = prime;
-                n += 2;
-
-                it = sieve.find(n);
-            }
-
-            // set composite for next round to the prime's square
-            sieve[n * n] = n;
-            last = n;
-            n += 2;
-            return *this;
-        }
-
-        iterator operator++(int) {
-            iterator retval = *this;
-            ++(*this);
-            return retval;
-        }
-
-        bool operator==(iterator other) const {
-            return last == other.last && is_end == other.is_end;
-        }
-
-        bool operator!=(iterator other) const {
-            return !(*this == other);
-        }
-
-        reference operator*() const {
-            return last;
-        }
-    };
-
-    iterator begin() {
-        return iterator();
+    Primes() {
+        n = 3;
+        last = 2;
+        sieve = std::map<long, long>();
     }
 
-    iterator end() {
-        return iterator(true);
+    long next() {
+        // check for presence of composite
+        auto it = sieve.find(n);
+        while (it != sieve.end()) {
+
+            // save space by removing key we've moved past
+            sieve.erase(it);
+            auto prime = it->second;
+
+            // add composites for this prime
+            long n_ = n + prime + prime;
+            while (sieve.find(n_) != sieve.end()) {
+                n_ += prime + prime;
+            }
+            sieve[n_] = prime;
+            n += 2;
+
+            it = sieve.find(n);
+        }
+
+        // set composite for next round to the prime's square
+        sieve[n * n] = n;
+        long r = last;
+        last = n;
+        n += 2;
+        return r;
     }
 };
 
-std::vector<long> prime_factors(long of) {
+std::vector<long> get_prime_factors(long of) {
+
     std::vector<long> pfacts;
     auto quotient = of;
+    auto primes = Primes();
 
-    for (auto prime : Primes()) {
+    for (;;) {
+        auto prime = primes.next();
         if (prime > quotient) {
             break;
         }
@@ -201,8 +180,9 @@ std::vector<long> prime_factors(long of) {
     return pfacts;
 }
 
+
 std::string problem03() {
-    auto pf = prime_factors(600851475143);
+    auto pf = get_prime_factors(600851475143);
     return std::to_string(*max_element(pf.begin(), pf.end()));
 }
 
@@ -275,7 +255,7 @@ std::map<long, int> union_highest_count(std::vector<std::map<long, int>> counts)
 std::string problem05() {
     std::vector<std::map<long, int>> counts(19);
     for (int n = 2, i = 0; n <= 20; n++, i++) {
-        counts[i] = count_duplicates(prime_factors(n));
+        counts[i] = count_duplicates(get_prime_factors(n));
     }
 
     auto unioned = union_highest_count(counts);
@@ -324,8 +304,13 @@ std::string problem06() {
  * we can see that the 6th prime is 13. What is the 10001st prime number?
  */
 std::string problem07() {
-    auto answer = std::next(Primes().begin(), 10000);
-    return std::to_string(*answer);
+    Primes primes;
+    long prime = 0;
+    for (int i = 0; i < 10001; i++) {
+        prime = primes.next();
+    }
+
+    return std::to_string(prime);
 }
 
 /*
@@ -434,8 +419,10 @@ std::string problem09() {
  * Find the sum of all the primes below two million.
  */
 std::string problem10() {
+    Primes primes;
     long sum = 0;
-    for (auto p : Primes()) {
+    for (;;) {
+        auto p = primes.next();
         if (p > 2000000) {
             break;
         } else {
@@ -446,7 +433,170 @@ std::string problem10() {
     return std::to_string(sum);
 }
 
+/*
+ * Largest product in a grid
+ *
+ * In the 20×20 grid below, four numbers along a diagonal line have been marked in red.
+ *
+ *  08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08
+ *  49 49 99 40 17 81 18 57 60 87 17 40 98 43 69 48 04 56 62 00
+ *  81 49 31 73 55 79 14 29 93 71 40 67 53 88 30 03 49 13 36 65
+ *  52 70 95 23 04 60 11 42 69 24 68 56 01 32 56 71 37 02 36 91
+ *  22 31 16 71 51 67 63 89 41 92 36 54 22 40 40 28 66 33 13 80
+ *  24 47 32 60 99 03 45 02 44 75 33 53 78 36 84 20 35 17 12 50
+ *  32 98 81 28 64 23 67 10 26 38 40 67 59 54 70 66 18 38 64 70
+ *  67 26 20 68 02 62 12 20 95 63 94 39 63 08 40 91 66 49 94 21
+ *  24 55 58 05 66 73 99 26 97 17 78 78 96 83 14 88 34 89 63 72
+ *  21 36 23 09 75 00 76 44 20 45 35 14 00 61 33 97 34 31 33 95
+ *  78 17 53 28 22 75 31 67 15 94 03 80 04 62 16 14 09 53 56 92
+ *  16 39 05 42 96 35 31 47 55 58 88 24 00 17 54 24 36 29 85 57
+ *  86 56 00 48 35 71 89 07 05 44 44 37 44 60 21 58 51 54 17 58
+ *  19 80 81 68 05 94 47 69 28 73 92 13 86 52 17 77 04 89 55 40
+ *  04 52 08 83 97 35 99 16 07 97 57 32 16 26 26 79 33 27 98 66
+ *  88 36 68 87 57 62 20 72 03 46 33 67 46 55 12 32 63 93 53 69
+ *  04 42 16 73 38 25 39 11 24 94 72 18 08 46 29 32 40 62 76 36
+ *  20 69 36 41 72 30 23 88 34 62 99 69 82 67 59 85 74 04 36 16
+ *  20 73 35 29 78 31 90 01 74 31 49 71 48 86 81 16 23 57 05 54
+ *  01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48
+ *
+ * The product of these numbers is 26 × 63 × 78 × 14 = 1788696.
+ * What is the greatest product of four adjacent numbers in the same direction (up, down, left, right, or diagonally) in the 20×20 grid?
+ */
+auto at_or_default(int g[][20], int default_value, int x, int y) {
+    return y < 20 && y >= 0 && x < 20 && x >= 0 ? g[y][x] : default_value;
+}
 
+auto get_largest_adjacent(int g[][20], int x, int y) {
+    auto right = at_or_default(g, 1, x, y)
+        * at_or_default(g, 1, x + 1, y)
+        * at_or_default(g, 1, x + 2, y)
+        * at_or_default(g, 1, x + 3, y);
+    auto left = at_or_default(g, 1, x, y)
+        * at_or_default(g, 1, x, y + 1)
+        * at_or_default(g, 1, x, y + 2)
+        * at_or_default(g, 1, x, y + 3);
+    auto downright = at_or_default(g, 1, x, y)
+        * at_or_default(g, 1, x + 1, y + 1)
+        * at_or_default(g, 1, x + 2, y + 2)
+        * at_or_default(g, 1, x + 3, y + 3);
+    auto downleft = at_or_default(g, 1, x, y)
+        * at_or_default(g, 1, x - 1, y + 1)
+        * at_or_default(g, 1, x - 2, y + 2)
+        * at_or_default(g, 1, x - 3, y + 3);
+
+    auto max = right;
+    max = max > left ? right : left;
+    max = max > downright ? max : downright;
+    max = max > downleft ? max : downleft;
+    return max;
+}
+
+std::string problem11() {
+    int grid[20][20] = {
+        {  8, 2,22,97,38,15, 0,40, 0,75, 4, 5, 7,78,52,12,50,77,91, 8 },
+        { 49,49,99,40,17,81,18,57,60,87,17,40,98,43,69,48, 4,56,62, 0 },
+        { 81,49,31,73,55,79,14,29,93,71,40,67,53,88,30, 3,49,13,36,65 },
+        { 52,70,95,23, 4,60,11,42,69,24,68,56, 1,32,56,71,37, 2,36,91 },
+        { 22,31,16,71,51,67,63,89,41,92,36,54,22,40,40,28,66,33,13,80 },
+        { 24,47,32,60,99, 3,45, 2,44,75,33,53,78,36,84,20,35,17,12,50 },
+        { 32,98,81,28,64,23,67,10,26,38,40,67,59,54,70,66,18,38,64,70 },
+        { 67,26,20,68, 2,62,12,20,95,63,94,39,63, 8,40,91,66,49,94,21 },
+        { 24,55,58, 5,66,73,99,26,97,17,78,78,96,83,14,88,34,89,63,72 },
+        { 21,36,23, 9,75, 0,76,44,20,45,35,14, 0,61,33,97,34,31,33,95 },
+        { 78,17,53,28,22,75,31,67,15,94, 3,80, 4,62,16,14, 9,53,56,92 },
+        { 16,39, 5,42,96,35,31,47,55,58,88,24, 0,17,54,24,36,29,85,57 },
+        { 86,56, 0,48,35,71,89, 7, 5,44,44,37,44,60,21,58,51,54,17,58 },
+        { 19,80,81,68, 5,94,47,69,28,73,92,13,86,52,17,77, 4,89,55,40 },
+        {  4,52, 8,83,97,35,99,16, 7,97,57,32,16,26,26,79,33,27,98,66 },
+        { 88,36,68,87,57,62,20,72, 3,46,33,67,46,55,12,32,63,93,53,69 },
+        {  4,42,16,73,38,25,39,11,24,94,72,18, 8,46,29,32,40,62,76,36 },
+        { 20,69,36,41,72,30,23,88,34,62,99,69,82,67,59,85,74, 4,36,16 },
+        { 20,73,35,29,78,31,90, 1,74,31,49,71,48,86,81,16,23,57, 5,54 },
+        {  1,70,54,71,83,51,54,69,16,92,33,48,61,43,52, 1,89,19,67,48 },
+    };
+
+    int max_sum = 0;
+    for (int i = 0; i < 20; i++) {
+        for (int j = 0; j < 20; j++) {
+            auto next_adj = get_largest_adjacent(grid, i, j);
+            if (next_adj > max_sum) {
+                max_sum = next_adj;
+            }
+        }
+    }
+
+    return std::to_string(max_sum);
+}
+
+/*
+  Highly divisible triangular number
+
+  The sequence of triangle numbers is generated by adding the natural numbers. So the 7th triangle number would be 1 + 2 + 3 + 4 + 5 + 6 + 7 = 28. The first ten terms would be:
+
+  1, 3, 6, 10, 15, 21, 28, 36, 45, 55, ...
+
+  Let us list the factors of the first seven triangle numbers:
+
+  1: 1
+  3: 1,3
+  6: 1,2,3,6
+  10: 1,2,5,10
+  15: 1,3,5,15
+  21: 1,3,7,21
+  28: 1,2,4,7,14,28
+
+  We can see that 28 is the first triangle number to have over five divisors.
+
+  What is the value of the first triangle number to have over five hundred divisors?
+*/
+
+std::set<long> get_factors(
+    long n, std::map<long, std::set<long>>& existing_factors) {
+
+    auto existing = existing_factors.find(n);
+    if (existing != existing_factors.end()) {
+        return existing->second;
+    }
+
+    auto pfactors = get_prime_factors(n);
+    std::set<long> factor_set(pfactors.begin(), pfactors.end());
+    factor_set.insert(1);
+    factor_set.insert(n);
+
+    for (auto prime : pfactors) {
+
+        auto factor = n / prime;
+        for (auto subfactor : get_factors(factor, existing_factors)) {
+            factor_set.insert(subfactor);
+        }
+
+    }
+
+    existing_factors.insert(std::pair<long, std::set<long>>(n, factor_set));
+    return factor_set;
+}
+
+std::string problem12() {
+
+    long adder = 0;
+    long tn = 0;
+
+    std::map<long, std::set<long>> existing_factors;
+    std::set<long> one;
+    one.insert(1);
+    std::pair<long, std::set<long>> mypair(1, one);
+    existing_factors.insert(mypair);
+
+    for (;;) {
+        adder += 1;
+        tn += adder;
+
+        auto factors = get_factors(tn, existing_factors);
+        if (factors.size() > 500) {
+            return std::to_string(tn);
+        }
+    }
+}
 
 } // end of Problems namespace
 

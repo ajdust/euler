@@ -11,4 +11,6 @@ namespace Problems {
     std::string problem08();
     std::string problem09();
     std::string problem10();
+    std::string problem11();
+    std::string problem12();
 }

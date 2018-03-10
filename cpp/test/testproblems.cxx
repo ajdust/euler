@@ -64,6 +64,16 @@ TEST_F(ProblemsTest, Problem_10_IsCorrect) {
     EXPECT_EQ(answer, answers["10"]);
 }
 
+TEST_F(ProblemsTest, Problem_11_IsCorrect) {
+    auto answer = Problems::problem11();
+    EXPECT_EQ(answer, answers["11"]);
+}
+
+TEST_F(ProblemsTest, Problem_12_IsCorrect) {
+    auto answer = Problems::problem12();
+    EXPECT_EQ(answer, answers["12"]);
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
