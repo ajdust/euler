@@ -550,31 +550,69 @@ std::string problem11() {
   What is the value of the first triangle number to have over five hundred divisors?
 */
 
-std::set<long> get_factors(
-    long n, std::map<long, std::set<long>>& existing_factors) {
+class MemoPrimeFactors {
+private:
+    std::vector<long> calculated_primes;
+    Primes primes;
+public:
+    std::vector<long> get_mprime_factors(long of) {
+        std::vector<long> pfacts;
+        uint count_calc_primes = calculated_primes.size();
+        auto quotient = of;
 
-    auto existing = existing_factors.find(n);
-    if (existing != existing_factors.end()) {
-        return existing->second;
-    }
-
-    auto pfactors = get_prime_factors(n);
-    std::set<long> factor_set(pfactors.begin(), pfactors.end());
-    factor_set.insert(1);
-    factor_set.insert(n);
-
-    for (auto prime : pfactors) {
-
-        auto factor = n / prime;
-        for (auto subfactor : get_factors(factor, existing_factors)) {
-            factor_set.insert(subfactor);
+        for (uint i = 0; i < count_calc_primes; i++) {
+            auto prime = calculated_primes.at(i);
+            if (prime > quotient) { return pfacts; }
+            auto remainder = quotient % prime;
+            while (remainder == 0) {
+                quotient = quotient / prime;
+                remainder = quotient % prime;
+                pfacts.push_back(prime);
+            }
         }
 
+        for (;;) {
+            auto prime = primes.next();
+            calculated_primes.push_back(prime);
+            if (prime > quotient) { return pfacts; }
+            auto remainder = quotient % prime;
+            while (remainder == 0) {
+                quotient = quotient / prime;
+                remainder = quotient % prime;
+                pfacts.push_back(prime);
+            }
+        }
+
+        return pfacts;
     }
 
-    existing_factors.insert(std::pair<long, std::set<long>>(n, factor_set));
-    return factor_set;
-}
+    std::set<long> get_factors(
+        long n, std::map<long, std::set<long>>& existing_factors) {
+
+        auto existing = existing_factors.find(n);
+        if (existing != existing_factors.end()) {
+            return existing->second;
+        }
+
+        auto pfactors = get_mprime_factors(n);
+        std::set<long> factor_set(pfactors.begin(), pfactors.end());
+        factor_set.insert(1);
+        factor_set.insert(n);
+
+        for (auto prime : pfactors) {
+
+            auto factor = n / prime;
+            for (auto subfactor : get_factors(factor, existing_factors)) {
+                factor_set.insert(subfactor);
+            }
+
+        }
+
+        existing_factors.insert(std::pair<long, std::set<long>>(n, factor_set));
+        return factor_set;
+    }
+};
+
 
 std::string problem12() {
 
@@ -586,12 +624,13 @@ std::string problem12() {
     one.insert(1);
     std::pair<long, std::set<long>> mypair(1, one);
     existing_factors.insert(mypair);
+    MemoPrimeFactors pf;
 
     for (;;) {
         adder += 1;
         tn += adder;
 
-        auto factors = get_factors(tn, existing_factors);
+        auto factors = pf.get_factors(tn, existing_factors);
         if (factors.size() > 500) {
             return std::to_string(tn);
         }
