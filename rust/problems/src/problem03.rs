@@ -6,24 +6,17 @@
 /// The prime factors of 13195 are 5, 7, 13 and 29.
 /// What is the largest prime factor of the number 600851475143 ?
 
-use std::collections::BTreeMap;
+use std::collections::HashMap;
 
 pub struct Primes {
     n: i64,
     last: i64,
-    sieve: BTreeMap<i64, i64>
+    sieve: HashMap<i64, i64>
 }
 
 impl Primes {
     pub fn new() -> Primes {
-        Primes { n: 3, last: 2, sieve: BTreeMap::new() }
-    }
-}
-
-fn get_match_copy(map: &BTreeMap<i64, i64>, n: &i64) -> Option<i64> {
-    match map.get(n) {
-        Some(p) => Some(*p),
-        None => None
+        Primes { n: 3, last: 2, sieve: HashMap::new() }
     }
 }
 
@@ -31,7 +24,17 @@ impl Iterator for Primes {
     type Item = i64;
     fn next(&mut self) -> Option<Self::Item> {
 
-        while let Some(prime) = get_match_copy(&self.sieve, &self.n) {
+        loop {
+
+            let prime: i64;
+            {
+                if let Some(prime_) = self.sieve.get(&self.n) {
+                    prime = *prime_;
+                } else {
+                    break;
+                }
+            }
+
             // don't need this key - remove it to save space
             self.sieve.remove(&self.n);
 

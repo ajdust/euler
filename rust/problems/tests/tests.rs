@@ -95,3 +95,15 @@ fn problem10_is_correct() {
     let solution = problem10::solve() as i64;
     assert_eq!(answer_for(10), solution);
 }
+
+#[test]
+fn problem11_is_correct() {
+    let solution = problem11::solve() as i64;
+    assert_eq!(answer_for(11), solution);
+}
+
+#[test]
+fn problem12_is_correct() {
+    let solution = problem12::solve() as i64;
+    assert_eq!(answer_for(12), solution);
+}
