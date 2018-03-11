@@ -1,3 +1,7 @@
+// run 'cargo test'
+// with stdout not captured: 'cargo test -- --nocapture'
+// with optimization: 'cargo test --release'
+
 extern crate serde;
 extern crate serde_json;
 extern crate problems;

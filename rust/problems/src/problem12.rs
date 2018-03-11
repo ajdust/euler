@@ -22,10 +22,12 @@
 
 use std::collections::HashMap;
 use std::collections::HashSet;
-use problem03::prime_factors;
+use problem03::Primes;
 
 struct FactorFinder {
-    known: HashMap<i64, HashSet<i64>>
+    known: HashMap<i64, HashSet<i64>>,
+    calculated_primes: Vec<i64>,
+    next_primes: Primes
 }
 
 impl FactorFinder {
@@ -35,7 +37,59 @@ impl FactorFinder {
         let mut one: HashSet<i64> = HashSet::new();
         one.insert(1);
         known.insert(1, one);
-        FactorFinder { known: known }
+        FactorFinder {
+            known: known,
+            calculated_primes: Vec::new(),
+            next_primes: Primes::new()
+        }
+    }
+
+    pub fn mprime_factors(&mut self, of: i64) -> Vec<i64> {
+        let mut pfacts = Vec::new();
+        let mut quotient = of;
+
+        {
+            for prime_ in self.calculated_primes.iter() {
+                let prime = *prime_;
+                if prime > quotient {
+                    return pfacts;
+                }
+
+                let mut remainder = quotient % prime;
+                while remainder == 0 {
+                    quotient = quotient / prime;
+                    remainder = quotient % prime;
+                    pfacts.push(prime);
+                }
+            }
+        }
+
+        {
+            loop {
+                let prime: i64;
+                {
+                    if let Some(prime_) = self.next_primes.next() {
+                        prime = prime_;
+                    } else {
+                        break;
+                    }
+                }
+
+                self.calculated_primes.push(prime);
+                if prime > quotient {
+                    return pfacts;
+                }
+
+                let mut remainder = quotient % prime;
+                while remainder == 0 {
+                    quotient = quotient / prime;
+                    remainder = quotient % prime;
+                    pfacts.push(prime);
+                }
+            }
+        }
+
+        pfacts
     }
 
     pub fn get_factors(&mut self, n: i64) -> HashSet<i64> {
@@ -47,7 +101,7 @@ impl FactorFinder {
         }
 
         {
-            let pfs = prime_factors(n);
+            let pfs = self.mprime_factors(n);
             let mut factor_set: HashSet<i64> = HashSet::new();
             factor_set.insert(1);
             factor_set.insert(n);
@@ -73,16 +127,16 @@ pub fn solve() -> i64 {
     let mut adder: i64 = 0;
     let mut tn: i64 = 0;
 
-    let mut ilog: i64 = 10000;
+    // let mut ilog: i64 = 10000;
 
     loop {
         adder += 1;
         tn += adder;
 
-        if tn >= ilog {
-            ilog += ilog;
-            println!("{}", tn);
-        }
+        // if tn >= ilog {
+        //     ilog += ilog;
+        //     println!("{}", tn);
+        // }
 
         let tn_factors = ff.get_factors(tn);
 
