@@ -70,16 +70,16 @@ func Problem02() string {
 // Problem 3: Largest prime factor
 // The prime factors of 13195 are 5, 7, 13 and 29.
 // What is the largest prime factor of the number 600851475143 ?
-type Primes struct {
+type PrimeGenerator struct {
 	n, last int64
 	sieve   map[int64]int64
 }
 
-func InitPrimes() *Primes {
-	return &Primes{3, 2, make(map[int64]int64)}
+func InitPrimeGenerator() *PrimeGenerator {
+	return &PrimeGenerator{3, 2, make(map[int64]int64)}
 }
 
-func (p *Primes) NextInt() int64 {
+func (p *PrimeGenerator) NextInt() int64 {
 	prime, ok := p.sieve[p.n]
 	for ok {
 		// don't need this key - remove it to save space
@@ -106,15 +106,54 @@ func (p *Primes) NextInt() int64 {
 	return r
 }
 
+type KnownPrimes struct {
+	values []int64
+}
+
 func GetPrimeFactors(of int64) []int64 {
 	pfacts := make([]int64, 0)
 	quotient := of
 
-	primes := InitPrimes()
+	primes := InitPrimeGenerator()
 	for {
 		prime := primes.NextInt()
 		if prime > quotient {
 			break
+		}
+
+		remainder := quotient % prime
+		for remainder == 0 {
+			quotient = quotient / prime
+			remainder = quotient % prime
+			pfacts = append(pfacts, prime)
+		}
+	}
+
+	return pfacts
+}
+
+func GetPrimeFactorsKnown(of int64, knownPrimes *KnownPrimes, nextPrimes *PrimeGenerator) []int64 {
+	pfacts := make([]int64, 0)
+	quotient := of
+
+	for _, prime := range knownPrimes.values {
+		if prime > quotient {
+			return pfacts
+		}
+
+		remainder := quotient % prime
+		for remainder == 0 {
+			quotient = quotient / prime
+			remainder = quotient % prime
+			pfacts = append(pfacts, prime)
+		}
+	}
+
+	for {
+		prime := nextPrimes.NextInt()
+		knownPrimes.values = append(knownPrimes.values, prime)
+		if prime > quotient {
+			return pfacts
 		}
 
 		remainder := quotient % prime
@@ -256,7 +295,7 @@ func Problem06() string {
 // By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13,
 // we can see that the 6th prime is 13. What is the 10001st prime number?
 func Problem07() string {
-	primes := InitPrimes()
+	primes := InitPrimeGenerator()
 	var prime int64
 	for i := 0; i <= 10000; i += 1 {
 		prime = primes.NextInt()
@@ -370,7 +409,7 @@ func Problem09() string {
 // The sum of the primes below 10 is 2 + 3 + 5 + 7 = 17.
 // Find the sum of all the primes below two million.
 func Problem10() string {
-	primes := InitPrimes()
+	primes := InitPrimeGenerator()
 	prime := primes.NextInt()
 	var total int64 = 0
 	for prime < 2000000 {
@@ -515,13 +554,16 @@ func Problem11() string {
 // We can see that 28 is the first triangle number to have over five divisors.
 //
 // What is the value of the first triangle number to have over five hundred divisors?
-func GetFactors(knownFactors map[int64][]int64, n int64) []int64 {
+func GetFactors(n int64,
+	knownFactors map[int64][]int64,
+	knownPrimes *KnownPrimes,
+	nextPrimes *PrimeGenerator) []int64 {
 
 	if _, ok := knownFactors[n]; ok {
 		return knownFactors[n]
 	}
 
-	primeFactors := GetPrimeFactors(n)
+	primeFactors := GetPrimeFactorsKnown(n, knownPrimes, nextPrimes)
 	factorSet := make(map[int64]bool)
 	factorSet[1] = true
 	factorSet[n] = true
@@ -530,7 +572,7 @@ func GetFactors(knownFactors map[int64][]int64, n int64) []int64 {
 
 		factor := n / prime
 
-		for _, subfactor := range GetFactors(knownFactors, factor) {
+		for _, subfactor := range GetFactors(factor, knownFactors, knownPrimes, nextPrimes) {
 			factorSet[subfactor] = true
 		}
 	}
@@ -549,6 +591,10 @@ func GetFactors(knownFactors map[int64][]int64, n int64) []int64 {
 }
 
 func Problem12() string {
+
+	knownPrimes := &KnownPrimes{make([]int64, 0)}
+	var nextPrimes = InitPrimeGenerator()
+
 	knownFactors := make(map[int64][]int64)
 	knownFactors[1] = []int64{1}
 
@@ -558,7 +604,7 @@ func Problem12() string {
 	for {
 		adder += 1
 		tn += adder
-		tnFactors := GetFactors(knownFactors, tn)
+		tnFactors := GetFactors(tn, knownFactors, knownPrimes, nextPrimes)
 
 		if len(tnFactors) > 500 {
 			return strconv.FormatInt(tn, 10)
