@@ -5,7 +5,7 @@
 cmake_minimum_required  (VERSION 3.5.1)
 project                 (problems)
 set                     (CMAKE_CXX_STANDARD 14)
-set                     (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -Wall -pedantic -Wextra")
+set                     (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wall -pedantic -Wextra")
 include_directories     (include)
 file                    (GLOB SOURCES "src/*.cxx")
 add_library             (problems SHARED ${SOURCES})

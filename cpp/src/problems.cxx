@@ -5,7 +5,8 @@
 #include <vector>
 #include <map>
 #include <algorithm>
-#include <set>
+#include <unordered_map>
+#include <unordered_set>
 
 namespace Problems {
 
@@ -119,13 +120,13 @@ class Primes {
 private:
     long n;
     long last;
-    std::map<long, long> sieve;
+    std::unordered_map<long, long> sieve;
 public:
 
     Primes() {
         n = 3;
         last = 2;
-        sieve = std::map<long, long>();
+        sieve = std::unordered_map<long, long>();
     }
 
     long next() {
@@ -567,27 +568,27 @@ public:
             while (remainder == 0) {
                 quotient = quotient / prime;
                 remainder = quotient % prime;
-                pfacts.push_back(prime);
+                pfacts.emplace_back(prime);
             }
         }
 
         for (;;) {
             auto prime = primes.next();
-            calculated_primes.push_back(prime);
+            calculated_primes.emplace_back(prime);
             if (prime > quotient) { return pfacts; }
             auto remainder = quotient % prime;
             while (remainder == 0) {
                 quotient = quotient / prime;
                 remainder = quotient % prime;
-                pfacts.push_back(prime);
+                pfacts.emplace_back(prime);
             }
         }
 
         return pfacts;
     }
 
-    std::set<long> get_factors(
-        long n, std::map<long, std::set<long>>& existing_factors) {
+    std::unordered_set<long> get_factors(
+        long n, std::unordered_map<long, std::unordered_set<long>>& existing_factors) {
 
         auto existing = existing_factors.find(n);
         if (existing != existing_factors.end()) {
@@ -595,7 +596,7 @@ public:
         }
 
         auto pfactors = get_mprime_factors(n);
-        std::set<long> factor_set(pfactors.begin(), pfactors.end());
+        std::unordered_set<long> factor_set(pfactors.begin(), pfactors.end());
         factor_set.insert(1);
         factor_set.insert(n);
 
@@ -608,7 +609,7 @@ public:
 
         }
 
-        existing_factors.insert(std::pair<long, std::set<long>>(n, factor_set));
+        existing_factors.insert(std::pair<long, std::unordered_set<long>>(n, factor_set));
         return factor_set;
     }
 };
@@ -619,10 +620,10 @@ std::string problem12() {
     long adder = 0;
     long tn = 0;
 
-    std::map<long, std::set<long>> existing_factors;
-    std::set<long> one;
+    std::unordered_map<long, std::unordered_set<long>> existing_factors;
+    std::unordered_set<long> one;
     one.insert(1);
-    std::pair<long, std::set<long>> mypair(1, one);
+    std::pair<long, std::unordered_set<long>> mypair(1, one);
     existing_factors.insert(mypair);
     MemoPrimeFactors pf;
 
