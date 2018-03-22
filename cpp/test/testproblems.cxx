@@ -1,7 +1,7 @@
 #include <fstream>
 #include "gtest/gtest.h"
 #include "problems.h"
-#include "json.hpp"
+#include "../external_lib/json.hpp"
 using json = nlohmann::json;
 
 class ProblemsTest : public ::testing::Test {
