@@ -38,11 +38,13 @@ Below is a table of summarized results from a particular run. `/usr/bin/time -v`
 for the benchmark. From `/usr/bin/time -v`, the column header of `Time` is seconds from `Elapsed (wall clock) time (m:ss)`,
 `Max-mem` is `Maximum resident set size (kbytes)`, `%CPU` is `Percent of CPU this job got`,
 `Vol` is `Voluntary context switches`, and `Invol` is `Involuntary context switches`.
+`C# AOT` is compiled and ran with [CoreRT](https://github.com/dotnet/corert).
 
 | Language | Time | Max-mem | %CPU |  Vol | Invol |
 | ------   | ---- | ------- | ---- | ---- | ----- |
 | Rust     |  9.7 |  761948 |   99 |    3 |    19 |
 | C#       | 10.3 | 1223508 |  102 |  118 |   303 |
+| C# AOT   | 10.3 |  919788 |   99 |   12 |    18 |
 | Go       | 11.4 |  387552 |  103 | 1539 |   138 |
 | F#       | 12.2 |  973736 |  106 |   95 |   279 |
 | C++      | 15.5 | 1059660 |   99 |    3 |    21 |
