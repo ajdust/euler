@@ -1,50 +1,64 @@
 #!/bin/bash
 
-echo 'Measuring: C++'
+echo -e '\nMeasuring: C++'
 
 cd cpp
 make build
 /usr/bin/time -v make --always-make runit
 make clean
 
-echo 'Measuring: C#'
+echo -e '\nMeasuring: C#'
 
 cd ../csharp
 make build
 /usr/bin/time -v make --always-make runit
 make clean
 
-echo 'Measuring: F#'
+echo -e '\nMeasuring: F#'
 
 cd ../fsharp
 make build
 /usr/bin/time -v make --always-make runit
 make clean
 
-echo 'Measuring: Go'
+echo -e '\nMeasuring: Go'
 
 cd ../go
 make build
 /usr/bin/time -v make --always-make runit
 make clean
 
-echo 'Measuring: Rust'
+echo -e '\nMeasuring: Rust'
 
 cd ../rust
 make build
 /usr/bin/time -v make --always-make runit
 make clean
 
-echo 'Measuring: Scala'
+echo -e '\nMeasuring: Scala'
 
 cd ../scala
 make build
 /usr/bin/time -v make --always-make runit
 make clean
 
-echo 'Measuring: Java'
+echo -e '\nMeasuring: Java'
 
 cd ../java
+make build
+/usr/bin/time -v make --always-make runit
+make clean
+
+echo -e '\nMeasuring: Crystal'
+
+cd ../crystal
+make build
+/usr/bin/time -v make --always-make runit
+make clean
+
+echo -e '\nMeasuring: Swift'
+
+cd ../swift
 make build
 /usr/bin/time -v make --always-make runit
 make clean
