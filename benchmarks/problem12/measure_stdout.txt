@@ -4,20 +4,20 @@ clang++ -O3 -Wall -pedantic -Wextra -std=c++14 main.cpp -o cpp_main
 ./cpp_main
 Answer: 842161320
     Command being timed: "make --always-make runit"
-    User time (seconds): 15.35
-    System time (seconds): 0.20
-    Percent of CPU this job got: 99%
-    Elapsed (wall clock) time (h:mm:ss or m:ss): 0:15.56
+    User time (seconds): 14.32
+    System time (seconds): 0.18
+    Percent of CPU this job got: 100%
+    Elapsed (wall clock) time (h:mm:ss or m:ss): 0:14.50
     Average shared text size (kbytes): 0
     Average unshared data size (kbytes): 0
     Average stack size (kbytes): 0
     Average total size (kbytes): 0
-    Maximum resident set size (kbytes): 1059748
+    Maximum resident set size (kbytes): 1053204
     Average resident set size (kbytes): 0
     Major (requiring I/O) page faults: 0
-    Minor (reclaiming a frame) page faults: 264414
-    Voluntary context switches: 3
-    Involuntary context switches: 273
+    Minor (reclaiming a frame) page faults: 262625
+    Voluntary context switches: 1
+    Involuntary context switches: 27
     Swaps: 0
     File system inputs: 0
     File system outputs: 0
