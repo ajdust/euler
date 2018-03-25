@@ -47,8 +47,8 @@ public:
 class FactorFinder {
 private:
     std::unordered_map<long, std::unordered_set<long>> known;
-    std::vector<long> known_primes;
     PrimeGenerator next_primes;
+    std::vector<long> known_primes;
 public:
 
     FactorFinder() {
@@ -61,12 +61,9 @@ public:
     std::vector<long> get_prime_factors(long of) {
 
         std::vector<long> factors;
-        uint count_known_primes = known_primes.size();
         auto quotient = of;
 
-        for (uint i = 0; i < count_known_primes; i++) {
-            auto prime = known_primes.at(i);
-
+        for (auto const& prime : known_primes) {
             if (prime > quotient) {
                 return factors;
             }
@@ -106,7 +103,7 @@ public:
         }
 
         auto pfactors = get_prime_factors(of);
-        std::unordered_set<long> factor_set(pfactors.begin(), pfactors.end());
+        std::unordered_set<long> factor_set;
         factor_set.insert(1);
         factor_set.insert(of);
 
