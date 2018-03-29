@@ -95,15 +95,15 @@ func (self *FactorFinder) GetFactors(of int64) []int64 {
 	}
 
 	primeFactors := self.GetPrimeFactors(of)
-	factorSet := make(map[int64]bool)
-	factorSet[1] = true
-	factorSet[of] = true
+	factorSet := make(map[int64]struct{})
+	factorSet[1] = struct{}{}
+	factorSet[of] = struct{}{}
 
 	for _, prime := range primeFactors {
 
 		factor := of / prime
 		for _, subfactor := range self.GetFactors(factor) {
-			factorSet[subfactor] = true
+			factorSet[subfactor] = struct{}{}
 		}
 	}
 
