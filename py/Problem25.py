@@ -11,16 +11,16 @@
 # Answer: 4782
 
 def fib():
-	a, b = 0, 1
-	yield a
-	yield b
-	while True:
-		a, b = b, a + b
-		yield b
+    a, b = 0, 1
+    yield a
+    yield b
+    while True:
+        a, b = b, a + b
+        yield b
 
 def fib_bigger_than(n):
-	for i, x in enumerate(fib()):
-		if x > n:
-			return i, x
+    for i, x in enumerate(fib()):
+        if x > n:
+            return i, x
 
 print(fib_bigger_than(10**999))

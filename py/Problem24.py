@@ -15,23 +15,23 @@
 from math import factorial as fac
 
 def get_lexigraphic_permutation_n(s, n):
-	""" Get the element at index n of the lexigraphically ordered set of permutations of s. """
-	distance = n 								# the distance left to the goal n
-	p_indexes = [None for e in s]				# the indexes into s representing the permutations
-	index_pool = [i for i, e in enumerate(s)]   # the pool of indexes as used up
+    """ Get the element at index n of the lexigraphically ordered set of permutations of s. """
+    distance = n                                # the distance left to the goal n
+    p_indexes = [None for e in s]               # the indexes into s representing the permutations
+    index_pool = [i for i, e in enumerate(s)]   # the pool of indexes as used up
 
-	cur_index = 0
-	while cur_index < len(s):
+    cur_index = 0
+    while cur_index < len(s):
 
-		permutation_counter = fac(len(s) - cur_index - 1) # how many permutations there are between steps at this counter
-		p_index = distance // permutation_counter         # how many permutation counts we can deal out without going over the limit
+        permutation_counter = fac(len(s) - cur_index - 1) # how many permutations there are between steps at this counter
+        p_index = distance // permutation_counter         # how many permutation counts we can deal out without going over the limit
 
-		p_indexes[cur_index] = index_pool.pop(p_index)    # pop from the index pool into the permutation index
-		distance -= p_index * permutation_counter         # reduce by the distance we traveled
+        p_indexes[cur_index] = index_pool.pop(p_index)    # pop from the index pool into the permutation index
+        distance -= p_index * permutation_counter         # reduce by the distance we traveled
 
-		cur_index += 1
+        cur_index += 1
 
-	return p_indexes
+    return p_indexes
 
 print(get_lexigraphic_permutation_n('0123456789', 999999))
 

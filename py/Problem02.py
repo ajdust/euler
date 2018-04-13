@@ -5,10 +5,10 @@ def take(n, iterable):
     return list(islice(iterable, n))
 
 def fib():
-	a, b = 1, 1
-	while True:
-		yield b
-		a, b = b, a + b
+    a, b = 1, 1
+    while True:
+        yield b
+        a, b = b, a + b
 
 print(take(100,fib()))
 

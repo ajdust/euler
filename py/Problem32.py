@@ -16,22 +16,22 @@ from itertools import permutations as P
 
 
 def check_permutation_has_products(permutation, dic):
-	p = ''.join(permutation)
-	for i in range(1,9):
-		for j in range(i + 1,9):
-			a = p[0:i]
-			b = p[i:j]
-			c = p[j:9]
-			key = ' '.join([min(a, b), max(a, b), c])
-			if key not in dic and int(a) * int(b) == int(c):
-				dic[key] = True
+    p = ''.join(permutation)
+    for i in range(1,9):
+        for j in range(i + 1,9):
+            a = p[0:i]
+            b = p[i:j]
+            c = p[j:9]
+            key = ' '.join([min(a, b), max(a, b), c])
+            if key not in dic and int(a) * int(b) == int(c):
+                dic[key] = True
 
 def calculate_pandigital():
-	permutations = P(['1','2','3','4','5','6','7','8','9'])
-	dic = {}
-	for p in permutations:
-		check_permutation_has_products(p, dic)
-	return dic
+    permutations = P(['1','2','3','4','5','6','7','8','9'])
+    dic = {}
+    for p in permutations:
+        check_permutation_has_products(p, dic)
+    return dic
 
 result = calculate_pandigital()
 print(len(result))

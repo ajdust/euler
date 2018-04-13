@@ -23,9 +23,9 @@ problem02 <- function() {
 
 fib <- function() {
 	fib_ <- function(a) {
-	    val <- c(a[2], a[1] + a[2])
-	    list(getnext=function() fib_(val),
-	    	 current=val[1])
+		val <- c(a[2], a[1] + a[2])
+		list(getnext=function() fib_(val),
+			 current=val[1])
 	}
 	fib_(c(0,1))
 }

@@ -27,87 +27,87 @@
 import sys
 
 def get_primes():
-	# use memoized primes
-	for prime in get_primes.primes:
-		yield prime
+    # use memoized primes
+    for prime in get_primes.primes:
+        yield prime
 
-	# a number is prime if it is not divisible by any lower primes
-	test_for_prime = max(get_primes.primes) + 2
-	while True:
-		if all(test_for_prime % p != 0 for p in get_primes.primes):
-			get_primes.primes.add(test_for_prime)
-			yield test_for_prime
-		test_for_prime += 2
+    # a number is prime if it is not divisible by any lower primes
+    test_for_prime = max(get_primes.primes) + 2
+    while True:
+        if all(test_for_prime % p != 0 for p in get_primes.primes):
+            get_primes.primes.add(test_for_prime)
+            yield test_for_prime
+        test_for_prime += 2
 get_primes.primes = set([2, 3, 5, 7, 11, 13, 17, 19])
 
 def get_prime_factors(n):
-	# use memoized prime factors
-	if n in get_prime_factors.remembered:
-		return get_prime_factors.remembered[n]
+    # use memoized prime factors
+    if n in get_prime_factors.remembered:
+        return get_prime_factors.remembered[n]
 
-	if n < 2:
-		return [n]
+    if n < 2:
+        return [n]
 
-	# moving up the prime list, repeatedly divide to find the prime factors
-	prime_factors = []
-	wn = n
-	done = False
-	while not done:
-		for prime in get_primes():
-			if wn == prime:
-				prime_factors.append(prime)
-				done = True
-				break
-			if wn % prime == 0:
-				prime_factors.append(prime)
-				wn /= prime
-				break
-	get_prime_factors.remembered[n] = prime_factors
-	return prime_factors
+    # moving up the prime list, repeatedly divide to find the prime factors
+    prime_factors = []
+    wn = n
+    done = False
+    while not done:
+        for prime in get_primes():
+            if wn == prime:
+                prime_factors.append(prime)
+                done = True
+                break
+            if wn % prime == 0:
+                prime_factors.append(prime)
+                wn /= prime
+                break
+    get_prime_factors.remembered[n] = prime_factors
+    return prime_factors
 get_prime_factors.remembered = {}
 
 # ideal method would not have to calculate the factors, but instead simply count them
 def get_factors_count(n):
-	prime_factors = get_prime_factors(n)
-	# calculating the count of the factors with the prime factors would be faster than computing + counting
-	# but what formula could I use to remove duplicate counts?
+    prime_factors = get_prime_factors(n)
+    # calculating the count of the factors with the prime factors would be faster than computing + counting
+    # but what formula could I use to remove duplicate counts?
 
 def get_factors(n):
-	# use memoized factors
-	if n in get_factors.factors:
-		return get_factors.factors[n]
+    # use memoized factors
+    if n in get_factors.factors:
+        return get_factors.factors[n]
 
-	# initialize factor set to primes
-	prime_factors = set(get_prime_factors(n))
-	all_factors = set(prime for prime in prime_factors)
-	all_factors.add(n)
-	all_factors.add(1)
+    # initialize factor set to primes
+    prime_factors = set(get_prime_factors(n))
+    all_factors = set(prime for prime in prime_factors)
+    all_factors.add(n)
+    all_factors.add(1)
 
-	# divide by primes and recursively find factors of divisions
-	for prime in prime_factors:
-		factor = n // prime
-		if factor < 2:
-			continue
-		if not factor in all_factors:
-			for factor in get_factors(factor):
-				all_factors.add(factor)
-	get_factors.factors[n] = all_factors
-	return all_factors
+    # divide by primes and recursively find factors of divisions
+    for prime in prime_factors:
+        factor = n // prime
+        if factor < 2:
+            continue
+        if not factor in all_factors:
+            for factor in get_factors(factor):
+                all_factors.add(factor)
+    get_factors.factors[n] = all_factors
+    return all_factors
 get_factors.factors = {}
 
 # triangle number generator
 def triangle_numbers():
-	trinum = 0
-	increment = 1
-	while True:
-		trinum += increment
-		increment += 1
-		yield trinum
+    trinum = 0
+    increment = 1
+    while True:
+        trinum += increment
+        increment += 1
+        yield trinum
 
 if __name__ == "__main__":
-	# this loop took about 50 seconds on my laptop
-	for n in triangle_numbers():
-		factors = get_factors(n)
-		if len(factors) > 500:
-			print(n)
-			break
+    # this loop took about 50 seconds on my laptop
+    for n in triangle_numbers():
+        factors = get_factors(n)
+        if len(factors) > 500:
+            print(n)
+            break
