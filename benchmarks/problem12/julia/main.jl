@@ -1,6 +1,8 @@
 # run with julia main.jl
 # julia version used: 0.6.2
 
+
+
 mutable struct PrimeGenerator
     n::Int64
     lastn::Int64
@@ -8,11 +10,7 @@ mutable struct PrimeGenerator
     PrimeGenerator() = new(3, 2, Dict())
 end
 
-function Base.start(::PrimeGenerator)
-    PrimeGenerator()
-end
-
-function Base.next(self::PrimeGenerator, state)
+function nextPrime(self::PrimeGenerator)
     prime = get(self.sieve, self.n, 0)
     while prime != 0
 
@@ -32,11 +30,7 @@ function Base.next(self::PrimeGenerator, state)
     r = self.lastn
     self.lastn = self.n
     self.n += 2
-    (self, r)
-end
-
-function Base.done(P::PrimeGenerator, self)
-    false
+    r
 end
 
 struct FactorFinder
@@ -64,7 +58,7 @@ function getPrimeFactors(self::FactorFinder, of::Int64)
     end
 
     while true
-        (_, prime) = next(self.nextPrimes, 0)
+        prime = nextPrime(self.nextPrimes)
         push!(self.knownPrimes, prime)
 
         if prime > quotient
@@ -88,7 +82,7 @@ function getFactors(self::FactorFinder, of::Int64)
         return existing
     end
 
-    factors = Set([1, of])
+    factors = Set{Int64}([1, of])
     for prime in getPrimeFactors(self, of)
         factor = div(of, prime)
         for subfactor in getFactors(self, factor)
