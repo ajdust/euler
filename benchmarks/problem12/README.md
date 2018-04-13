@@ -28,7 +28,7 @@ with over 1000 divisors.
 
 Using the same algorithm, with the data structures available in their
 standard library, compare the performance of this problem as written in C++, Java,
-C#, Go, Rust, F#, and Scala. Note that no special language-specific tuning is evident.
+C#, Go, Rust, F#, Scala, Swift, Crystal, and C# AOT. Note that no special language-specific tuning is evident.
 I wrote this code is as if I were a naive rookie for each language (which I am).
 Full optimizing flags were passed to the language's compiler for those languages that have them.
 
