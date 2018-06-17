@@ -7,3 +7,4 @@ runit: nim_main
 
 clean:
 	rm ./nim_main
+	rm -rf ./nimcache

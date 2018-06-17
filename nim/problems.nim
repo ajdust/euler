@@ -84,6 +84,7 @@ proc nextPrime(state: PrimeGeneratorState): int64 =
 
     # x_x getOrDefault should have parameter for default, not default value
     # https://nim-lang.org/docs/tables.html#getOrDefault,Table[A,B],A
+    # https://github.com/nim-lang/Nim/issues/4265
     var prime = state.sieve.getOrDefault(state.n)
     if prime == 0'i64:
       break

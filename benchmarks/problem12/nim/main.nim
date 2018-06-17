@@ -12,29 +12,27 @@ proc initialPrimeGeneratorState(): PrimeGeneratorState =
   result.last = 2'i64
   result.sieve = newTable[int64,int64]()
 
-proc next(state: PrimeGeneratorState): int64 =
-  while true:
+proc next(self: PrimeGeneratorState): int64 =
 
-    var prime = state.sieve.getOrDefault(state.n)
-    if prime == 0'i64:
-      break
-
+  var prime = self.sieve.getOrDefault(self.n)
+  while prime != 0:
     # don't need this key, remove it to save space
-    state.sieve.del(state.n)
+    self.sieve.del(self.n)
 
     # add composite
-    var composite = state.n + prime + prime
-    while state.sieve.contains(composite):
+    var composite = self.n + prime + prime
+    while self.sieve.contains(composite):
       composite = composite + prime + prime
 
-    state.sieve[composite] = prime
-    state.n = state.n + 2'i64
+    self.sieve[composite] = prime
+    self.n = self.n + 2'i64
+    prime = self.sieve.getOrDefault(self.n)
 
   # add composite in prep for next round
-  state.sieve[state.n * state.n] = state.n
-  result = state.last
-  state.last = state.n
-  state.n = state.n + 2'i64
+  self.sieve[self.n * self.n] = self.n
+  result = self.last
+  self.last = self.n
+  self.n = self.n + 2'i64
 
 
 type
@@ -42,6 +40,14 @@ type
     known: TableRef[int64, HashSet[int64]]
     nextPrimes: PrimeGeneratorState
     knownPrimes: seq[int64]
+
+proc initialFactorFinder(): FactorFinder =
+  result = new(FactorFinder)
+  result.nextPrimes = initialPrimeGeneratorState()
+  result.knownPrimes = newSeq[int64]()
+  var one = initSet[int64]()
+  one.incl(1'i64)
+  result.known = newTable({1'i64:one})
 
 proc getPrimeFactors(self: FactorFinder, ofn: int64): seq[int64] =
   var factors = newSeq[int64]()
@@ -59,7 +65,6 @@ proc getPrimeFactors(self: FactorFinder, ofn: int64): seq[int64] =
 
   while true:
     let prime = self.nextPrimes.next()
-    # echo prime
     self.knownPrimes.add(prime)
     if prime > quotient:
       return factors
@@ -73,8 +78,9 @@ proc getPrimeFactors(self: FactorFinder, ofn: int64): seq[int64] =
 
 proc getFactors(self: FactorFinder, ofn: int64): HashSet[int64] =
 
-  if self.known.contains(ofn):
-    return self.known[ofn]
+  let existing = self.known.getOrDefault(ofn)
+  if len(existing) > 0:
+    return existing
 
   let pfs = self.getPrimeFactors(ofn)
   var factorSet = initSet[int64]()
@@ -90,37 +96,17 @@ proc getFactors(self: FactorFinder, ofn: int64): HashSet[int64] =
   factorSet
 
 proc solve(): int64 =
-  let finder = new(FactorFinder)
-  finder.nextPrimes = initialPrimeGeneratorState()
-  finder.knownPrimes = newSeq[int64]()
-  var one = initSet[int64]()
-  one.incl(1'i64)
-  finder.known = newTable({1'i64:one})
+  let finder = initialFactorFinder()
 
   var adder = 0'i64
   var tn = 0'i64
-  var i = 10000
 
   while true:
     adder = adder + 1
-    tn = tn + 1
-    if tn > i:
-      echo tn
-      i = i + i
+    tn = tn + adder
 
     let tnFactors = finder.getFactors(tn)
-    if tnFactors.len() > 500:
+    if len(tnFactors) > 1000:
       return tn
 
-proc test() =
-  let finder = new(FactorFinder)
-  finder.nextPrimes = initialPrimeGeneratorState()
-  finder.knownPrimes = newSeq[int64]()
-  var one = initSet[int64]()
-  one.incl(1'i64)
-  finder.known = newTable({1'i64:one})
-
-  echo finder.getFactors(20)
-
-# test()
 echo solve()
