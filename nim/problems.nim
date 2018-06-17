@@ -1,3 +1,5 @@
+# nim compile --run problems.nim
+
 import tables, sequtils
 
 #[
@@ -56,11 +58,13 @@ iterator fib(): int64 =
 proc problem02(): int64 =
   var total = 0'i64
   for f in fib():
+    # x_x No 'takeWhile' or equivalent in sequtils
     if f > 4000000'i64:
       break
     if f mod 2'i64 == 0'i64:
       total = total + f
   total
+
 
 #[
   Largest prime factor
@@ -78,6 +82,8 @@ type
 proc nextPrime(state: PrimeGeneratorState): int64 =
   while true:
 
+    # x_x getOrDefault should have parameter for default, not default value
+    # https://nim-lang.org/docs/tables.html#getOrDefault,Table[A,B],A
     var prime = state.sieve.getOrDefault(state.n)
     if prime == 0'i64:
       break
@@ -100,13 +106,15 @@ proc nextPrime(state: PrimeGeneratorState): int64 =
   state.n = state.n + 2'i64
 
 proc findFactors(ofn: int64): seq[int64] =
-  var factors = newSeq[int64](10)
+  var factors = newSeq[int64]()
   var quotient = ofn
 
+  # x_x No initializer syntax to use with new?
+  # https://nim-lang.org/docs/tut1.html#advanced-types-reference-and-pointer-types
   var pgs = new(PrimeGeneratorState)
   pgs.n = 3'i64
   pgs.last = 2'i64
-  pgs.sieve = {0'i64:0'i64}.newTable
+  pgs.sieve = newTable[int64,int64]()
 
   while true:
     let prime = nextPrime(pgs)
@@ -122,6 +130,9 @@ proc findFactors(ofn: int64): seq[int64] =
 proc problem03(): int64 =
   findFactors(600851475143).foldl(if a > b: a else: b)
 
+
+echo problem01()
+echo problem02()
 echo problem03()
 
 
