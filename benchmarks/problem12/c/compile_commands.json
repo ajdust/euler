@@ -1,0 +1,7 @@
+[
+	{
+	  "directory": "/src/Documents/euler/benchmarks/problem12/c",
+	  "command": "clang -O3 -Wall -Wextra -pedantic main.c -o c_main -I/src/Documents/uthash/src",
+	  "file": "main.c"
+	}
+]
