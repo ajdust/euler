@@ -6,4 +6,4 @@ clean:
 	rm cpp_main_eastl
 
 runit:
-	./cpp_main
+	./cpp_main_eastl

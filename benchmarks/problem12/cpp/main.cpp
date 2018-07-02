@@ -1,31 +1,25 @@
+#include <cstdint>
 #include <iostream>
-#include <vector>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 
 namespace factorbench {
 
 class PrimeGenerator {
 private:
-    long n;
-    long last;
-    std::unordered_map<long, long> sieve;
+    int64_t n = 3;
+    int64_t last = 2;
+    std::unordered_map<int64_t, int64_t> sieve = {};
 public:
-
-    PrimeGenerator() {
-        n = 3;
-        last = 2;
-        sieve = std::unordered_map<long, long>();
-    }
-
-    long next() {
+    int64_t next() {
         auto it = sieve.find(n);
         while (it != sieve.end()) {
 
             sieve.erase(it);
             auto prime = it->second;
 
-            long composite = n + prime + prime;
+            int64_t composite = n + prime + prime;
             while (sieve.find(composite) != sieve.end()) {
                 composite += prime + prime;
             }
@@ -36,7 +30,7 @@ public:
         }
 
         sieve[n * n] = n;
-        long r = last;
+        int64_t r = last;
         last = n;
         n += 2;
         return r;
@@ -46,21 +40,18 @@ public:
 
 class FactorFinder {
 private:
-    std::unordered_map<long, std::unordered_set<long>> known;
+    std::unordered_map<int64_t, std::unordered_set<int64_t>> known;
     PrimeGenerator next_primes;
-    std::vector<long> known_primes;
+    std::vector<int64_t> known_primes;
 public:
 
     FactorFinder() {
-        std::unordered_set<long> one;
-        one.insert(1);
-        std::pair<long, std::unordered_set<long>> justone(1, one);
-        known.insert(justone);
+        known.insert({ 1, { 1 } });
     }
 
-    std::vector<long> get_prime_factors(long of) {
+    std::vector<int64_t> get_prime_factors(int64_t of) {
 
-        std::vector<long> factors;
+        std::vector<int64_t> factors;
         auto quotient = of;
 
         for (auto const& prime : known_primes) {
@@ -95,7 +86,7 @@ public:
         return factors;
     }
 
-    std::unordered_set<long> get_factors(long of) {
+    std::unordered_set<int64_t> get_factors(int64_t of) {
 
         auto existing = known.find(of);
         if (existing != known.end()) {
@@ -103,9 +94,7 @@ public:
         }
 
         auto pfactors = get_prime_factors(of);
-        std::unordered_set<long> factor_set;
-        factor_set.insert(1);
-        factor_set.insert(of);
+        std::unordered_set<int64_t> factor_set { 1, of };
 
         for (auto prime : pfactors) {
 
@@ -116,18 +105,18 @@ public:
 
         }
 
-        known.insert(std::pair<long, std::unordered_set<long>>(of, factor_set));
+        known.insert({ of, factor_set });
         return factor_set;
     }
 };
 
 
-long solve() {
+int64_t solve() {
 
     FactorFinder pf;
 
-    long adder = 0;
-    long tn = 0;
+    int64_t adder = 0;
+    int64_t tn = 0;
 
     for (;;) {
         adder += 1;
@@ -140,7 +129,7 @@ long solve() {
     }
 }
 
-} // end of namespace
+} // namespace factorbench
 
 int main() {
     auto answer = factorbench::solve();
