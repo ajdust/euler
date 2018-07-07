@@ -28,6 +28,11 @@ void map_add(Map* map, int64_t key, int64_t value) {
         return;
 
     KeyValuePair* kvp = malloc(sizeof(KeyValuePair));
+    if (kvp == NULL) {
+        perror("Failed to allocate memory for KeyValuePair");
+        exit(EXIT_FAILURE);
+    }
+
     kvp->key = key;
     kvp->value = value;
     HASH_ADD_INT(*map, key, kvp);
@@ -50,6 +55,11 @@ void set_add(Set* set, int64_t value) {
         return;
 
     Value* new_value = malloc(sizeof(Value));
+    if (new_value == NULL) {
+        perror("Failed to allocate memory for Value");
+        exit(EXIT_FAILURE);
+    }
+
     new_value->value = value;
     HASH_ADD_INT(*set, value, new_value);
 }
@@ -58,7 +68,6 @@ void set_free(Set set) {
     Value* s = NULL;
     Value* tmp = NULL;
     HASH_ITER(hh, set, s, tmp) { free(s); }
-    free(set);
 }
 
 typedef struct SetMapPair {
@@ -79,6 +88,11 @@ void setmap_add(SetMap* setmap, int64_t key, Set set) {
         return;
 
     SetMapPair* new_ksp = malloc(sizeof(SetMapPair));
+    if (new_ksp == NULL) {
+        perror("Failed to allocate memory for SetMapPair");
+        exit(EXIT_FAILURE);
+    }
+
     new_ksp->key = key;
     new_ksp->set = set;
     HASH_ADD_INT(*setmap, key, new_ksp);
@@ -105,6 +119,11 @@ typedef struct PrimeGen {
 
 PrimeGen* primegen_new(void) {
     PrimeGen* pg = malloc(sizeof(PrimeGen));
+    if (pg == NULL) {
+        perror("Failed to allocate memory for PrimeGen");
+        exit(EXIT_FAILURE);
+    }
+
     pg->n = 3;
     pg->last = 2;
     pg->sieve = NULL;
@@ -172,6 +191,11 @@ FactorFinder* factorfinder_new(void) {
     utarray_new(array, &int64_icd);
 
     FactorFinder* ff = malloc(sizeof(FactorFinder));
+    if (ff == NULL) {
+        perror("Failed to allocate memory for FactorFinder");
+        exit(EXIT_FAILURE);
+    }
+
     ff->known = setmap;
     ff->next_primes = primegen_new();
     ff->known_primes = array;
@@ -264,7 +288,6 @@ int64_t solve(void) {
 
         Set factors = factorfinder_get_factors(ff, tn);
         if (HASH_COUNT(factors) > 1000) {
-            printf("Got %" PRId64 "\n", tn);
             set_free(factors);
             utarray_free(ff->known_primes);
             free(ff);
@@ -302,7 +325,7 @@ void print_factors_test(void) {
     }
 }
 
-int main() {
+int main(void) {
     // print_primes(20);
     // print_prime_factors_test();
     // print_factors_test();
