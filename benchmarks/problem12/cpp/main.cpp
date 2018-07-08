@@ -13,20 +13,21 @@ private:
     std::unordered_map<int64_t, int64_t> sieve = {};
 public:
     int64_t next() {
-        auto it = sieve.find(n);
-        while (it != sieve.end()) {
+        auto len = sieve.count(n);
+        while (len > 0) {
 
+            auto it = sieve[n];
             sieve.erase(it);
-            auto prime = it->second;
+            auto prime = it;
 
             int64_t composite = n + prime + prime;
-            while (sieve.find(composite) != sieve.end()) {
+            while (sieve.count(composite) > 0) {
                 composite += prime + prime;
             }
             sieve[composite] = prime;
             n += 2;
 
-            it = sieve.find(n);
+            len = sieve.count(n);
         }
 
         sieve[n * n] = n;
