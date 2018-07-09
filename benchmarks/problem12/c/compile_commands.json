@@ -1,6 +1,6 @@
 [
 	{
-	  "directory": "/home/aaron/Documents/euler/benchmarks/problem12/c",
+	  "directory": "/home/aaron/Dropbox/projects/euler/benchmarks/problem12/c",
 	  "command": "clang -O3 -Wall -Wextra -pedantic main.c -o c_main -I/home/aaron/Documents/uthash/src",
 	  "file": "main.c"
 	}

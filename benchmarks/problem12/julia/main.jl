@@ -1,8 +1,6 @@
 # run with julia main.jl
 # julia version used: 0.6.2
 
-
-
 mutable struct PrimeGenerator
     n::Int64
     lastn::Int64

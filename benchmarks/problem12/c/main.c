@@ -1,8 +1,9 @@
-#include <stdint.h>
-#include <stdio.h>
-#include <inttypes.h>
-#include <utarray.h>
-#include <uthash.h>
+#include <stdint.h>   // int64_t
+#include <stdio.h>    // printf
+#include <stdlib.h>   // malloc
+#include <inttypes.h> // PRId64 printf formatter
+#include <utarray.h>  // UT_array and macros
+#include <uthash.h>   // UT_hash_handle and macros
 /*
    Using https://github.com/troydhanson/uthash
    Helpers for C equivalent to:
@@ -15,15 +16,15 @@ typedef struct KeyValuePair {
     int64_t value;
     UT_hash_handle hh;
 } KeyValuePair;
-typedef KeyValuePair* Map;
+typedef KeyValuePair Map;
 
-KeyValuePair* map_find(Map map, int64_t key) {
+KeyValuePair* map_find(Map* map, int64_t key) {
     KeyValuePair* s;
     HASH_FIND_INT(map, &key, s);
     return s;
 }
 
-void map_add(Map* map, int64_t key, int64_t value) {
+void map_add(Map** map, int64_t key, int64_t value) {
     if (map_find(*map, key) != NULL)
         return;
 
@@ -42,15 +43,15 @@ typedef struct Value {
     int64_t value;
     UT_hash_handle hh;
 } Value;
-typedef Value* Set;
+typedef Value Set;
 
-Value* set_find(Set set, int64_t value) {
+Value* set_find(Set* set, int64_t value) {
     Value* s;
     HASH_FIND_INT(set, &value, s);
     return s;
 }
 
-void set_add(Set* set, int64_t value) {
+void set_add(Set** set, int64_t value) {
     if (set_find(*set, value) != NULL)
         return;
 
@@ -64,7 +65,7 @@ void set_add(Set* set, int64_t value) {
     HASH_ADD_INT(*set, value, new_value);
 }
 
-void set_free(Set set) {
+void set_free(Set* set) {
     Value* s = NULL;
     Value* tmp = NULL;
     HASH_ITER(hh, set, s, tmp) { free(s); }
@@ -72,18 +73,18 @@ void set_free(Set set) {
 
 typedef struct SetMapPair {
     int64_t key;
-    Set set;
+    Set* set;
     UT_hash_handle hh;
 } SetMapPair;
-typedef SetMapPair* SetMap;
+typedef SetMapPair SetMap;
 
-SetMapPair* setmap_find(SetMap setmap, int64_t key) {
+SetMapPair* setmap_find(SetMap* setmap, int64_t key) {
     SetMapPair* s;
     HASH_FIND_INT(setmap, &key, s);
     return s;
 }
 
-void setmap_add(SetMap* setmap, int64_t key, Set set) {
+void setmap_add(SetMap** setmap, int64_t key, Set* set) {
     if (setmap_find(*setmap, key) != NULL)
         return;
 
@@ -98,7 +99,7 @@ void setmap_add(SetMap* setmap, int64_t key, Set set) {
     HASH_ADD_INT(*setmap, key, new_ksp);
 }
 
-void setmap_free(SetMap setmap) {
+void setmap_free(SetMap* setmap) {
     SetMapPair* smp = NULL;
     SetMapPair* tmp = NULL;
     HASH_ITER(hh, setmap, smp, tmp) {
@@ -114,7 +115,7 @@ void setmap_free(SetMap setmap) {
 typedef struct PrimeGen {
     int64_t n;
     int64_t last;
-    Map sieve;
+    Map* sieve;
 } PrimeGen;
 
 PrimeGen* primegen_new(void) {
@@ -136,13 +137,12 @@ void primegen_free(PrimeGen* pg) {
     KeyValuePair* sieve = pg->sieve;
 
     HASH_ITER(hh, sieve, kv, tmp) {
-        HASH_DEL(sieve, kv);  /* delete it */
-        free(kv);             /* free it */
+        HASH_DEL(sieve, kv);
+        free(kv);
     }
 
     free(pg);
 }
-
 
 int64_t primegen_next(PrimeGen* pgp) {
     KeyValuePair* it = map_find(pgp->sieve, pgp->n);
@@ -175,16 +175,16 @@ int64_t primegen_next(PrimeGen* pgp) {
 UT_icd int64_icd = {sizeof(int64_t), NULL, NULL, NULL};
 
 typedef struct FactorFinder {
-    SetMap known;
+    SetMap* known;
     PrimeGen* next_primes;
     UT_array* known_primes;
 } FactorFinder;
 
 FactorFinder* factorfinder_new(void) {
-    Set justone = NULL;
+    Set* justone = NULL;
     set_add(&justone, 1);
 
-    SetMap setmap = NULL;
+    SetMap* setmap = NULL;
     setmap_add(&setmap, 1, justone);
 
     UT_array* array = NULL;
@@ -200,6 +200,13 @@ FactorFinder* factorfinder_new(void) {
     ff->next_primes = primegen_new();
     ff->known_primes = array;
     return ff;
+}
+
+void factorfinder_free(FactorFinder* ff) {
+    utarray_free(ff->known_primes);
+    setmap_free(ff->known);
+    primegen_free(ff->next_primes);
+    free(ff);
 }
 
 UT_array* factorfinder_get_prime_factors(FactorFinder* ff, int64_t of) {
@@ -245,7 +252,7 @@ UT_array* factorfinder_get_prime_factors(FactorFinder* ff, int64_t of) {
     return factors;
 }
 
-Set factorfinder_get_factors(FactorFinder* ff, int64_t of) {
+Set* factorfinder_get_factors(FactorFinder* ff, int64_t of) {
 
     SetMapPair* existing = setmap_find(ff->known, of);
     if (existing != NULL) {
@@ -253,7 +260,7 @@ Set factorfinder_get_factors(FactorFinder* ff, int64_t of) {
     }
 
     UT_array* pfactors = factorfinder_get_prime_factors(ff, of);
-    Set factor_set = NULL;
+    Set* factor_set = NULL;
     set_add(&factor_set, 1);
     set_add(&factor_set, of);
 
@@ -263,7 +270,7 @@ Set factorfinder_get_factors(FactorFinder* ff, int64_t of) {
         int64_t prime = *primep;
 
         int64_t factor = of / prime;
-        Set subfactors = factorfinder_get_factors(ff, factor);
+        Set* subfactors = factorfinder_get_factors(ff, factor);
 
         for (Value* v = subfactors; v != NULL; v = v->hh.next) {
             int64_t subfactor = v->value;
@@ -286,51 +293,15 @@ int64_t solve(void) {
         adder += 1;
         tn += adder;
 
-        Set factors = factorfinder_get_factors(ff, tn);
+        Set* factors = factorfinder_get_factors(ff, tn);
         if (HASH_COUNT(factors) > 1000) {
-            set_free(factors);
-            utarray_free(ff->known_primes);
-            free(ff);
-
+            // note: freeing takes a not insignificant amount of time
+            factorfinder_free(ff);
             return tn;
         }
     }
 }
 
-void print_primes(int n) {
-    PrimeGen* pg = primegen_new();
-    for (int i = 0; i < n; i++) {
-        int64_t next = primegen_next(pg);
-        printf("Prime: %" PRId64 "\n", next);
-    }
-    primegen_free(pg);
-}
-
-void print_prime_factors_test(void) {
-    FactorFinder* ff = factorfinder_new();
-    UT_array* factors = factorfinder_get_prime_factors(ff, 135);
-    for (int64_t* factorp = (int64_t*)utarray_front(factors);
-        factorp != NULL;
-        factorp = (int64_t*)utarray_next(factors, factorp)) {
-        printf("Prime Factor: %" PRId64 "\n", *factorp);
-    }
-}
-
-void print_factors_test(void) {
-    FactorFinder* ff = factorfinder_new();
-    Set factors = factorfinder_get_factors(ff, 20);
-    Value* v = NULL;
-    for (v = factors; v != NULL; v = v->hh.next) {
-        printf("Factor: %" PRId64 "\n", v->value);
-    }
-}
-
 int main(void) {
-    // print_primes(20);
-    // print_prime_factors_test();
-    // print_factors_test();
-    int64_t answer = solve();
-    printf("Answer: %" PRId64 "\n", answer);
+    printf("Answer: %" PRId64 "\n", solve());
 }
-
-
