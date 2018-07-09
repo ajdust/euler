@@ -1,5 +1,5 @@
 # run with julia main.jl
-# julia version used: 0.6.2
+# julia version used: 0.6.3
 
 mutable struct PrimeGenerator
     n::Int64
@@ -8,9 +8,10 @@ mutable struct PrimeGenerator
     PrimeGenerator() = new(3, 2, Dict())
 end
 
-function nextPrime(self::PrimeGenerator)
-    prime = get(self.sieve, self.n, 0)
-    while prime != 0
+function nextPrime(self::PrimeGenerator)::Int64
+
+    while haskey(self.sieve, self.n)
+        prime = get(self.sieve, self.n, 0)
 
         delete!(self.sieve, self.n)
 
@@ -21,7 +22,6 @@ function nextPrime(self::PrimeGenerator)
         self.sieve[composite] = prime
 
         self.n += 2
-        prime = get(self.sieve, self.n, 0)
     end
 
     self.sieve[self.n * self.n] = self.n
@@ -38,8 +38,8 @@ struct FactorFinder
     FactorFinder() = new(Dict(1 => Set(1)), PrimeGenerator(), [])
 end
 
-function getPrimeFactors(self::FactorFinder, of::Int64)
-    factors = []
+function getPrimeFactors(self::FactorFinder, of::Int64)::Array{Int64}
+    factors = Int64[]
     quotient = of
 
     for prime in self.knownPrimes
@@ -74,9 +74,9 @@ function getPrimeFactors(self::FactorFinder, of::Int64)
     factors
 end
 
-function getFactors(self::FactorFinder, of::Int64)
-    existing = get(self.known, of, 0)
-    if existing != 0
+function getFactors(self::FactorFinder, of::Int64)::Set{Int64}
+    existing = get(self.known, of, Set{Int64}())
+    if length(existing) > 0
         return existing
     end
 
@@ -92,7 +92,7 @@ function getFactors(self::FactorFinder, of::Int64)
     factors
 end
 
-function solve()
+function solve()::Int64
     finder = FactorFinder()
     adder = 0
     tn = 0
@@ -108,5 +108,4 @@ function solve()
     end
 end
 
-answer = solve()
-println("Answer: " * string(answer))
+println("Answer: " * string(solve()))
