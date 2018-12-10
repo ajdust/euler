@@ -35,22 +35,22 @@ Full optimizing flags were passed to the language's compiler for those languages
 Below is a table of summarized results from a particular run. `/usr/bin/time -f "%x %e %M"` is used
 for the benchmark.
 
-| Language |  Exit Code |  Elapsed Time (s) |  Max Resident Set Size (MB) |
-| ---     | --- | --- | --- |
-|      Go |  0 |  7.17 |  377 |
-|    Rust |  0 |  7.36 |  772 |
-|     C++ |  0 |  7.92 |  1083 |
-|      C# |  0 |  7.29 |  1176 |
-| Crystal |  0 |  7.52 |  1422 |
-|      F# |  0 |  8.12 |  1235 |
-|       D |  0 |  8.65 |  1434 |
-|    Java |  0 |  9.00 |  2635 |
-|   Swift |  0 |  10.21 |  424 |
-|   Scala |  0 |  10.32 |  1704 |
-|       C |  0 |  12.02 |  2405 |
-|   Julia |  0 |  24.22 |  1206 |
-|  Python |  0 |  38.56 |  1566 |
-|     Nim |  0 |  41.99 |  3159 |
+| Language |  Elapsed Time (s) |  Max Resident Set Size (MB) |
+| ---      | ---:   | ---:  |
+|      Go  |  7.17  |   377 |
+|    Rust  |  7.36  |   772 |
+|     C++  |  7.92  |  1083 |
+|      C#  |  7.29  |  1176 |
+| Crystal  |  7.52  |  1422 |
+|      F#  |  8.12  |  1235 |
+|       D  |  8.65  |  1434 |
+|    Java  |  9.00  |  2635 |
+|   Swift  |  10.21 |   424 |
+|   Scala  |  10.32 |  1704 |
+|       C  |  12.02 |  2405 |
+|   Julia  |  24.22 |  1206 |
+|  Python  |  38.56 |  1566 |
+|     Nim  |  41.99 |  3159 |
 
 VM runtimes installed: `openjdk 10.0.2 2018-07-17` and `Microsoft.NETCore.App 2.1.5`. Compilers used:
 - C `clang -O3` [6.0.0-1ubuntu2]
