@@ -85,7 +85,7 @@ def solve():
         adder += 1
         tn += adder
         factors = finder.getFactors(tn)
-        if len(factors) > 500:
+        if len(factors) > 1000:
             return tn
 
 def main():

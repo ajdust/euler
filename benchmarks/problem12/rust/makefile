@@ -1,9 +1,6 @@
 
 build: main.rs
-	rustc -O main.rs -o rust_main
+	rustc -C opt-level=3 main.rs -o main
 
 clean:
-	rm rust_main
-
-runit:
-	./rust_main
+	rm main

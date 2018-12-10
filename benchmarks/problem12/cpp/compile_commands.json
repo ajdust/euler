@@ -1,7 +1,0 @@
-[
-	{
-	  "directory": "/src/Documents/euler/benchmarks/problem12/cpp",
-	  "command": "clang++ -O3 -Wall -pedantic -Wextra -std=c++14 main.cpp -o cpp_main",
-	  "file": "main.cpp"
-	}
-]

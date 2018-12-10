@@ -27,30 +27,43 @@ For the purposes of the benchmark, we're looking for the first triangular number
 with over 1000 divisors.
 
 Using the same algorithm, with the data structures available in their
-standard library, compare the performance of this problem as written in C++, Java,
-C#, Go, Rust, F#, Scala, Swift, Crystal, and C# AOT. Note that no special language-specific tuning is evident.
-I wrote this code is as if I were a naive rookie for each language (which I am).
+standard library (except for C and C++), compare the performance of this problem as written in various languages.
 Full optimizing flags were passed to the language's compiler for those languages that have them.
 
 ### Results
 
-Below is a table of summarized results from a particular run. `/usr/bin/time -v` is used
-for the benchmark. From `/usr/bin/time -v`, the column header of `Time` is seconds from `Elapsed (wall clock) time (m:ss)`,
-`Max-mem` is `Maximum resident set size (kbytes)`, `%CPU` is `Percent of CPU this job got`,
-`Vol` is `Voluntary context switches`, and `Invol` is `Involuntary context switches`.
-`C# AOT` is compiled and ran with [CoreRT](https://github.com/dotnet/corert).
+Below is a table of summarized results from a particular run. `/usr/bin/time -f "%x %e %M"` is used
+for the benchmark.
 
-| Language | Time | Max-mem | %CPU |  Vol | Invol |
-| ------   | ---- | ------- | ---- | ---- | ----- |
-| Rust     |  9.7 |  761948 |   99 |    3 |    19 |
-| C#       | 10.3 | 1223508 |  102 |  118 |   303 |
-| C# AOT   | 10.3 |  919788 |   99 |   12 |    18 |
-| Swift    | 10.6 |  417532 |   99 |    3 |    26 |
-| Crystal  | 11.0 | 1417640 |   99 |  304 |   324 |
-| Go       | 11.4 |  387552 |  103 | 1539 |   138 |
-| F#       | 12.2 |  973736 |  106 |   95 |   279 |
-| C++      | 14.5 | 1053204 |  100 |    1 |    27 |
-| Scala    | 20.8 | 1464376 |  175 | 2363 |  3884 |
-| Java     | 21.6 | 1586532 |  250 | 2091 |  6883 |
+| Language |  Exit Code |  Elapsed Time (s) |  Max Resident Set Size (MB) |
+| ---     | --- | --- | --- |
+|      Go |  0 |  7.17 |  377 |
+|    Rust |  0 |  7.36 |  772 |
+|     C++ |  0 |  7.92 |  1083 |
+|      C# |  0 |  7.29 |  1176 |
+| Crystal |  0 |  7.52 |  1422 |
+|      F# |  0 |  8.12 |  1235 |
+|       D |  0 |  8.65 |  1434 |
+|    Java |  0 |  9.00 |  2635 |
+|   Swift |  0 |  10.21 |  424 |
+|   Scala |  0 |  10.32 |  1704 |
+|       C |  0 |  12.02 |  2405 |
+|   Julia |  0 |  24.22 |  1206 |
+|  Python |  0 |  38.56 |  1566 |
+|     Nim |  0 |  41.99 |  3159 |
 
-
+VM runtimes installed: `openjdk 10.0.2 2018-07-17` and `Microsoft.NETCore.App 2.1.5`. Compilers used:
+- C `clang -O3` [6.0.0-1ubuntu2]
+- C++ `clang++ -O3` [6.0.0-1ubuntu2]
+- D `ldc2 -O` [1.8.0]
+- Go `go build` [1.11.2]
+- Rust `rustc -C opt-level=3` [1.32.0-nightly]
+- Swift `swiftc -O` [4.2.1]
+- Java `javac` [10.0.2]
+- Scala `dotc`
+- CSharp `dotnet -c release` [2.1.403],
+- FSharp `dotnet -c release` [2.1.403]
+- Crystal `crystal build --release` [0.27.0]
+- Nim `nim compile -d:release --opt:speed` [0.19.0]
+- Python `python3` [3.6.7]
+- Julia (PackageCompiler) [1.0.2]

@@ -1,9 +1,6 @@
 
 build: main.go
-	go build -o go_main
+	go build -o main
 
 clean:
-	rm go_main
-
-runit:
-	./go_main
+	rm main

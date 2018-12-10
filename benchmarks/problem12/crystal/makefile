@@ -4,6 +4,3 @@ build: main.cr
 
 clean:
 	rm main
-
-runit:
-	./main

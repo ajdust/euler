@@ -4,6 +4,3 @@ build: main.swift
 
 clean:
 	rm main
-
-runit:
-	./main

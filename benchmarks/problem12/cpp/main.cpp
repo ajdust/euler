@@ -1,8 +1,14 @@
+// requires that sparsehash is installed: https://github.com/sparsehash/sparsehash
+// used because stl unordered_map is not as efficient as it can be: https://www.youtube.com/watch?v=fHNmRkzxHWs
+
 #include <cstdint>
 #include <iostream>
-#include <unordered_map>
-#include <unordered_set>
+#include <sparsehash/dense_hash_map>
+#include <sparsehash/dense_hash_set>
 #include <vector>
+
+using google::dense_hash_set;
+using google::dense_hash_map;
 
 namespace factorbench {
 
@@ -10,8 +16,12 @@ class PrimeGenerator {
 private:
     int64_t n = 3;
     int64_t last = 2;
-    std::unordered_map<int64_t, int64_t> sieve = {};
+    dense_hash_map<int64_t, int64_t> sieve;
 public:
+    PrimeGenerator() {
+        sieve.set_empty_key(0);
+    }
+
     int64_t next() {
         auto len = sieve.count(n);
         while (len > 0) {
@@ -41,13 +51,17 @@ public:
 
 class FactorFinder {
 private:
-    std::unordered_map<int64_t, std::unordered_set<int64_t>> known;
+    dense_hash_map<int64_t, dense_hash_set<int64_t>> known;
     PrimeGenerator next_primes;
     std::vector<int64_t> known_primes;
 public:
 
     FactorFinder() {
-        known.insert({ 1, { 1 } });
+        dense_hash_set<int64_t> initSet;
+        initSet.set_empty_key(0);
+        initSet.insert(1);
+        known.set_empty_key(0);
+        known[1] = initSet;
     }
 
     std::vector<int64_t> get_prime_factors(int64_t of) {
@@ -87,7 +101,7 @@ public:
         return factors;
     }
 
-    std::unordered_set<int64_t> get_factors(int64_t of) {
+    dense_hash_set<int64_t> get_factors(int64_t of) {
 
         auto existing = known.find(of);
         if (existing != known.end()) {
@@ -95,7 +109,10 @@ public:
         }
 
         auto pfactors = get_prime_factors(of);
-        std::unordered_set<int64_t> factor_set { 1, of };
+        dense_hash_set<int64_t> factor_set;
+        factor_set.set_empty_key(0);
+        factor_set.insert(1);
+        factor_set.insert(of);
 
         for (auto prime : pfactors) {
 

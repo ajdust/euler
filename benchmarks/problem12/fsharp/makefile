@@ -1,10 +1,11 @@
 
 build: main.fs
-	fsharpc -O main.fs -o fsharp_main.exe
+	dotnet publish -c Release -r linux-x64
+	echo "#!/bin/bash" >> main
+	echo "./bin/Release/netcoreapp2.1/linux-x64/publish/factorbench" >> main
+	chmod +x main
 
 clean:
-	rm fsharp_main.exe
-	rm FSharp.Core.dll
-
-runit:
-	./fsharp_main.exe
+	rm -rf bin
+	rm -rf obj
+	rm main

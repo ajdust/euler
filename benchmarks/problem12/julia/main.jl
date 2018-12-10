@@ -1,5 +1,6 @@
 # run with julia main.jl
 # julia version used: 0.6.3
+module BenchmarkProblem12
 
 mutable struct PrimeGenerator
     n::Int64
@@ -92,7 +93,7 @@ function getFactors(self::FactorFinder, of::Int64)::Set{Int64}
     factors
 end
 
-function solve()::Int64
+function solve(factorCount)::Int64
     finder = FactorFinder()
     adder = 0
     tn = 0
@@ -102,10 +103,15 @@ function solve()::Int64
         tn += adder
 
         factors = getFactors(finder, tn)
-        if length(factors) > 1000
+        if length(factors) > factorCount
             return tn
         end
     end
 end
 
-println("Answer: " * string(solve()))
+Base.@ccallable function julia_main(ARGS::Vector{String})::Cint
+    println("Answer: " * string(solve(1000)))
+    return 0
+end
+
+end

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"fmt"
 	"strconv"
 )
@@ -137,5 +138,5 @@ func Solve() int64 {
 
 func main() {
 	answer := Solve()
-	println("Answer: ", answer)
+	os.Stdout.WriteString("Answer: " + strconv.FormatInt(answer, 10) + "\n")
 }
