@@ -1,13 +1,6 @@
 import fs = require("fs");
 import stream = require("stream");
 
-interface NucleotideCount {
-    A: number;
-    C: number;
-    G: number;
-    T: number;
-}
-
 function endl(): stream.Transform {
     return new stream.Transform({
         transform(this: stream.Transform, chunk, encoding, callback) {
@@ -21,11 +14,19 @@ function endl(): stream.Transform {
     });
 }
 
+interface INucleotideCount {
+    A: number;
+    C: number;
+    T: number;
+    G: number;
+}
+
 function dna(): stream.Transform {
 
     let A = 0, C = 0, T = 0, G = 0;
 
     return new stream.Transform({
+        readableObjectMode: true, // learning: can READ objects from this stream
         transform(chunk, encoding, callback) {
             const data = chunk.toString();
             for (let i = 0; i < data.length; ++i) {
@@ -44,7 +45,17 @@ function dna(): stream.Transform {
             callback();
         },
         flush(this: stream.Transform, callback) {
-            this.push(`${A} ${C} ${G} ${T}`);
+            this.push({ A, C, T, G });
+            callback();
+        },
+    });
+}
+
+function dnaToString(): stream.Transform {
+    return new stream.Transform({
+        writableObjectMode: true, // learning: can WRITE objects to this stream
+        transform(chunk: INucleotideCount, encoding, callback) {
+            this.push(`${chunk.A} ${chunk.C} ${chunk.T} ${chunk.G}`);
             callback();
         },
     });
@@ -57,7 +68,7 @@ export function main(args: string[]) {
     try {
         let transform: stream.Transform;
         if (problem === "dna") {
-            transform = fs.createReadStream(filepath || "./rosalind_dna.txt").pipe(dna());
+            transform = fs.createReadStream(filepath || "./rosalind_dna.txt").pipe(dna()).pipe(dnaToString());
         } else {
             throw new Error(`Unrecognized problem '${problem}'`);
         }
