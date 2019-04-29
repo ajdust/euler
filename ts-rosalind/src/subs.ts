@@ -17,7 +17,7 @@ export function findSubstrs(str: string, substr: string) {
 export function subs() {
     const lines: string[] = [];
     const grabTwoLines = new stream.Transform({
-        transform(chunk, encoding, callback) {
+        transform(chunk, _, callback) {
             lines.push(chunk.toString().trim());
             callback();
         },
