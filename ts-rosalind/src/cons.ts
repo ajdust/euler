@@ -9,7 +9,7 @@ export function cons() {
 
     const and = new stream.Transform({
         writableObjectMode: true,
-        transform(chunk: IFastaChunk, encoding, callback) {
+        transform(chunk: IFastaChunk, _, callback) {
             const dna = chunk.content;
             for (let i = 0; i < dna.length; ++i) {
                 const c = dna.charAt(i);

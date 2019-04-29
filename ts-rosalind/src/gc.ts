@@ -12,7 +12,7 @@ export function countPerFasta(): stream.Transform {
     return new stream.Transform({
         writableObjectMode: true,
         readableObjectMode: true,
-        transform(fastaChunk: IFastaChunk, encoding, callback) {
+        transform(fastaChunk: IFastaChunk, _, callback) {
             const nucleotideCount = countNucleotidesSync(fastaChunk.content);
             this.push({ fastaChunk, nucleotideCount });
             callback();
@@ -30,7 +30,7 @@ export function gcPerFasta(): stream.Transform {
     return new stream.Transform({
         writableObjectMode: true,
         readableObjectMode: true,
-        transform(chunk: ICountPerFasta, encoding, callback) {
+        transform(chunk: ICountPerFasta, _, callback) {
             const nc = chunk.nucleotideCount;
             this.push({
                 fastaChunk: chunk.fastaChunk,
@@ -46,7 +46,7 @@ export function gcToString(): stream.Transform {
 
     return new stream.Transform({
         writableObjectMode: true,
-        transform(chunk: IGCPerFasta, encoding, callback) {
+        transform(chunk: IGCPerFasta, _, callback) {
             this.push(`${chunk.fastaChunk.label}\n${chunk.gc}`);
             callback();
         },

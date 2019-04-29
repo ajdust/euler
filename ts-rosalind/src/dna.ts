@@ -32,7 +32,7 @@ export function countNucleotides(): stream.Transform {
 
     return new stream.Transform({
         readableObjectMode: true,
-        transform(chunk, encoding, callback) {
+        transform(chunk, _, callback) {
             const data: string = chunk.toString();
             for (let i = 0; i < data.length; ++i) {
                 const c = data.charAt(i);
@@ -59,7 +59,7 @@ export function countNucleotides(): stream.Transform {
 export function stringifyNucleotideCount(): stream.Transform {
     return new stream.Transform({
         writableObjectMode: true,
-        transform(chunk: INucleotideCount, encoding, callback) {
+        transform(chunk: INucleotideCount, _, callback) {
             this.push(`${chunk.A} ${chunk.C} ${chunk.T} ${chunk.G}`);
             callback();
         },

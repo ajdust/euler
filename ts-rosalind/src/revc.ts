@@ -1,9 +1,9 @@
 import stream = require("stream");
-import { StreamCombiner } from "./util";
+import { StreamCombiner, reverse } from "./util";
 
 export function complement() {
     return new stream.Transform({
-        transform(chunk, encoding, callback) {
+        transform(chunk, _, callback) {
             const data: string = chunk.toString();
             for (let i = 0; i < data.length; ++i) {
                 const c = data.charAt(i);
@@ -17,21 +17,6 @@ export function complement() {
                     this.push("A");
                 }
             }
-            callback();
-        },
-    });
-}
-
-export function reverse() {
-    const buffer: string[] = [];
-    return new stream.Transform({
-        transform(chunk, _, callback) {
-            buffer.push(chunk.toString());
-            callback();
-        },
-        flush(callback) {
-            this.push(buffer.map((v) => v.split("").reverse().join(""))
-                .reverse().join(""));
             callback();
         },
     });

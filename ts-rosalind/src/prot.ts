@@ -211,7 +211,7 @@ export function prot() {
     let currentStatus = Stage.Start;
     let leftover = "";
     return new stream.Transform({
-        transform(chunk, encoding, callback) {
+        transform(chunk, _, callback) {
             let data: string = chunk.toString();
             do {
                 let i = 0;
@@ -241,6 +241,7 @@ export function prot() {
                             leftover = data.slice(i - 3);
                         }
 
+                        callback();
                         return;
                 }
             } while (true);

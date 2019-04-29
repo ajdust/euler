@@ -14,12 +14,12 @@ export function hammCount(left: string, right: string): number {
 export function hamm(): stream.Transform {
     let all = "";
     return new stream.Transform({
-        transform(chunk, encoding, callback) {
+        transform(chunk, _, callback) {
             all += chunk.toString();
             callback();
         },
         flush(callback) {
-            const [line1, line2, _] = all.split("\n");
+            const [line1, line2] = all.split("\n");
             this.push(hammCount(line1, line2).toString());
             callback();
         },

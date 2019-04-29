@@ -32,6 +32,7 @@ export class StreamCombiner extends stream.PassThrough {
         });
     }
 
+    // forward pipe to inner pipe
     pipe(dest: any, options: any) {
         if (this.writeStream) {
             return this.writeStream.pipe(dest, options);
@@ -45,7 +46,7 @@ export function maxBy(predicate: (element: any) => number) {
     return new stream.Transform({
         writableObjectMode: true,
         readableObjectMode: true,
-        transform(chunk, encoding, callback) {
+        transform(chunk, _, callback) {
             const size = predicate(chunk);
             if (size > maxSize) {
                 maxSize = size;
@@ -63,7 +64,7 @@ export function maxBy(predicate: (element: any) => number) {
 
 export function endl(): stream.Transform {
     return new stream.Transform({
-        transform(this: stream.Transform, chunk, encoding, callback) {
+        transform(this: stream.Transform, chunk, _, callback) {
             this.push(chunk);
             callback();
         },
@@ -78,13 +79,15 @@ export function lineByLine(): stream.Transform {
 
     const chars: string[] = [];
     return new stream.Transform({
-        transform(this: stream.Transform, chunk, encoding, callback) {
+        transform(this: stream.Transform, chunk, _, callback) {
             const data: string = chunk.toString();
             for (let i = 0; i < data.length; ++i) {
                 const c = data.charAt(i);
                 chars.push(c);
                 if (c === "\n") {
-                    this.push(chars.join(""));
+                    if (chars.length) {
+                        this.push(chars.join(""));
+                    }
                     chars.length = 0;
                 }
             }
@@ -111,7 +114,7 @@ export function fasta(): stream.Transform {
     let fastaChunk: IFastaChunk = { label: "", content: "" };
     return new stream.Transform({
         readableObjectMode: true,
-        transform(this: stream.Transform, chunk, encoding, callback) {
+        transform(this: stream.Transform, chunk, _, callback) {
             if (!chunk.length) {
                 callback();
                 return;
@@ -138,6 +141,21 @@ export function fasta(): stream.Transform {
                 this.push(fastaChunk);
             }
 
+            callback();
+        },
+    });
+}
+
+export function reverse() {
+    const buffer: string[] = [];
+    return new stream.Transform({
+        transform(chunk, _, callback) {
+            buffer.push(chunk.toString());
+            callback();
+        },
+        flush(callback) {
+            this.push(buffer.map((v) => v.split("").reverse().join(""))
+                .reverse().join(""));
             callback();
         },
     });
