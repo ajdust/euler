@@ -120,6 +120,7 @@ export function fasta(): stream.Transform {
             const data: string = chunk.toString();
             if (data.charAt(0) === ">") {
                 if (fastaChunk.label.length) {
+                    fastaChunk.content = fastaChunk.content.trim();
                     this.push(fastaChunk);
                     fastaChunk = { label: "", content: "" };
                 }
@@ -133,10 +134,18 @@ export function fasta(): stream.Transform {
         },
         flush(this: stream.Transform, callback) {
             if (fastaChunk.label.length) {
+                fastaChunk.content = fastaChunk.content.trim();
                 this.push(fastaChunk);
             }
 
             callback();
         },
     });
+}
+
+export function streamFromString(s: string): stream.Readable {
+    const pass = new stream.Readable();
+    pass.push(s);
+    pass.push(null);
+    return pass;
 }
