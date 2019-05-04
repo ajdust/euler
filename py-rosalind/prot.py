@@ -25,7 +25,7 @@ class AminoAcid(Enum):
     Stop = auto()
 
 def convertToAminoAcid(codon: str) -> AminoAcid:
-    if (codon == "UUU"):
+    if codon == "UUU":
         return AminoAcid.F
     elif codon == "CUU":
         return AminoAcid.L

@@ -217,13 +217,7 @@ export function prot() {
                 let i = 0;
                 switch (currentStatus) {
                     case Stage.Start:
-                        for (; i < data.length - 2; ++i) {
-                            if (convertToAminoAcid(data.slice(i, i + 3)) === AminoAcid.M) {
-                                currentStatus = Stage.Codons;
-                                break;
-                            }
-                        }
-
+                        i = data.indexOf("AUG");
                         break;
 
                     case Stage.Codons:
