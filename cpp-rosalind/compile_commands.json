@@ -1,0 +1,62 @@
+[
+{
+  "directory": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind",
+  "command": "/usr/bin/g++   -I/home/aaron/Dropbox/projects/rosalind/cpp-rosalind  -g   -std=gnu++1z -o CMakeFiles/Problems.dir/dna.cpp.o -c /home/aaron/Dropbox/projects/rosalind/cpp-rosalind/dna.cpp",
+  "file": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind/dna.cpp"
+},
+{
+  "directory": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind",
+  "command": "/usr/bin/g++   -I/home/aaron/Dropbox/projects/rosalind/cpp-rosalind  -g   -std=gnu++1z -o CMakeFiles/Problems.dir/rna.cpp.o -c /home/aaron/Dropbox/projects/rosalind/cpp-rosalind/rna.cpp",
+  "file": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind/rna.cpp"
+},
+{
+  "directory": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind",
+  "command": "/usr/bin/g++   -I/home/aaron/Dropbox/projects/rosalind/cpp-rosalind  -g   -std=gnu++1z -o CMakeFiles/Problems.dir/revc.cpp.o -c /home/aaron/Dropbox/projects/rosalind/cpp-rosalind/revc.cpp",
+  "file": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind/revc.cpp"
+},
+{
+  "directory": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind",
+  "command": "/usr/bin/g++   -I/home/aaron/Dropbox/projects/rosalind/cpp-rosalind  -g   -std=gnu++1z -o CMakeFiles/Problems.dir/fib.cpp.o -c /home/aaron/Dropbox/projects/rosalind/cpp-rosalind/fib.cpp",
+  "file": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind/fib.cpp"
+},
+{
+  "directory": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind",
+  "command": "/usr/bin/g++   -I/home/aaron/Dropbox/projects/rosalind/cpp-rosalind  -g   -std=gnu++1z -o CMakeFiles/Problems.dir/gc.cpp.o -c /home/aaron/Dropbox/projects/rosalind/cpp-rosalind/gc.cpp",
+  "file": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind/gc.cpp"
+},
+{
+  "directory": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind",
+  "command": "/usr/bin/g++   -I/home/aaron/Dropbox/projects/rosalind/cpp-rosalind  -g   -std=gnu++1z -o CMakeFiles/Problems.dir/hamm.cpp.o -c /home/aaron/Dropbox/projects/rosalind/cpp-rosalind/hamm.cpp",
+  "file": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind/hamm.cpp"
+},
+{
+  "directory": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind",
+  "command": "/usr/bin/g++   -I/home/aaron/Dropbox/projects/rosalind/cpp-rosalind  -g   -std=gnu++1z -o CMakeFiles/Problems.dir/iprb.cpp.o -c /home/aaron/Dropbox/projects/rosalind/cpp-rosalind/iprb.cpp",
+  "file": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind/iprb.cpp"
+},
+{
+  "directory": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind",
+  "command": "/usr/bin/g++   -I/home/aaron/Dropbox/projects/rosalind/cpp-rosalind  -g   -std=gnu++1z -o CMakeFiles/Problems.dir/prot.cpp.o -c /home/aaron/Dropbox/projects/rosalind/cpp-rosalind/prot.cpp",
+  "file": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind/prot.cpp"
+},
+{
+  "directory": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind",
+  "command": "/usr/bin/g++   -I/home/aaron/Dropbox/projects/rosalind/cpp-rosalind  -g   -std=gnu++1z -o CMakeFiles/Problems.dir/subs.cpp.o -c /home/aaron/Dropbox/projects/rosalind/cpp-rosalind/subs.cpp",
+  "file": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind/subs.cpp"
+},
+{
+  "directory": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind",
+  "command": "/usr/bin/g++   -I/home/aaron/Dropbox/projects/rosalind/cpp-rosalind  -g   -std=gnu++1z -o CMakeFiles/Problems.dir/cons.cpp.o -c /home/aaron/Dropbox/projects/rosalind/cpp-rosalind/cons.cpp",
+  "file": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind/cons.cpp"
+},
+{
+  "directory": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind",
+  "command": "/usr/bin/g++   -I/home/aaron/Dropbox/projects/rosalind/cpp-rosalind  -g   -std=gnu++1z -o CMakeFiles/Problems.dir/common.cpp.o -c /home/aaron/Dropbox/projects/rosalind/cpp-rosalind/common.cpp",
+  "file": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind/common.cpp"
+},
+{
+  "directory": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind",
+  "command": "/usr/bin/g++   -I/home/aaron/Dropbox/projects/rosalind/cpp-rosalind  -g   -std=gnu++1z -o CMakeFiles/cpprosalind.dir/main.cpp.o -c /home/aaron/Dropbox/projects/rosalind/cpp-rosalind/main.cpp",
+  "file": "/home/aaron/Dropbox/projects/rosalind/cpp-rosalind/main.cpp"
+}
+]
