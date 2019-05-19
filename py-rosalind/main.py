@@ -12,8 +12,8 @@ from rna import rna
 from subs import subs
 
 def main(args: List[str]):
-    problem = args[2] if len(args) >= 3 else "subs"
-    filePath = args[3] if len(args) >= 4 else None
+    problem = args[1] if len(args) >= 2 else "subs"
+    filePath = args[2] if len(args) >= 3 else None
 
     if problem == "dna":
         with open(filePath if filePath is not None else "./rosalind_dna.txt") as f:
@@ -32,16 +32,16 @@ def main(args: List[str]):
     elif problem == "iprb":
         print(iprb(20, 18, 24))
     elif problem == "prot":
-        with open(filePath if filePath is not None else "../rosalind_prot.txt") as f:
+        with open(filePath if filePath is not None else "./rosalind_prot.txt") as f:
             print(prot(f))
     elif problem == "revc":
-        with open(filePath if filePath is not None else "../rosalind_revc.txt") as f:
+        with open(filePath if filePath is not None else "./rosalind_revc.txt") as f:
             print(revc(f))
     elif problem == "rna":
-        with open(filePath if filePath is not None else "../rosalind_rna.txt") as f:
+        with open(filePath if filePath is not None else "./rosalind_rna.txt") as f:
             print(rna(f))
     elif problem == "subs":
-        with open(filePath if filePath is not None else "../rosalind_subs.txt") as f:
+        with open(filePath if filePath is not None else "./rosalind_subs.txt") as f:
             print(subs(f))
 
 if __name__ == "__main__":
