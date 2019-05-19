@@ -1,12 +1,13 @@
 /**
  * Created by Aaron Johnson on 2017-06-10
+ * Updated 2018-12-27
  */
 
 package problemtests
 
-import org.junit.Test
-import org.junit.Assert.*
-import org.junit.BeforeClass
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeAll
 import problems.*
 import java.io.File
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -18,61 +19,61 @@ class ProblemTests {
     companion object {
         lateinit var answers: Map<String,String>
 
-        @BeforeClass @JvmStatic fun setup() {
+        @BeforeAll @JvmStatic fun setup() {
             // things to execute once and keep around for the class
             val json = File("../answers.json").readText()
-            var mapper = ObjectMapper().registerKotlinModule()
+            val mapper = ObjectMapper().registerKotlinModule()
             answers = mapper.readValue(json)
         }
     }
 
     @Test fun problem01IsCorrect() {
         val problem = Problem01()
-        assertEquals("Problem 1 error", answers["1"], problem.solve())
+        assertEquals(answers["1"], problem.solve(), "Problem 1 error")
     }
 
     @Test fun problem2IsCorrect() {
         val problem = Problem02()
-        assertEquals("Problem 2 error", answers["2"], problem.solve())
+        assertEquals(answers["2"], problem.solve(), "Problem 2 error")
     }
 
     @Test fun problem3IsCorrect() {
         val problem = Problem03()
-        assertEquals("Problem 3 error", answers["3"], problem.solve())
+        assertEquals(answers["3"], problem.solve(), "Problem 3 error")
     }
 
     @Test fun problem4IsCorrect() {
         val problem = Problem04()
-        assertEquals("Problem 4 error", answers["4"], problem.solve())
+        assertEquals(answers["4"], problem.solve(), "Problem 4 error")
     }
 
     @Test fun problem5IsCorrect() {
         val problem = Problem05()
-        assertEquals("Problem 5 error", answers["5"], problem.solve())
+        assertEquals(answers["5"], problem.solve(), "Problem 5 error")
     }
 
     @Test fun problem6IsCorrect() {
         val problem = Problem06()
-        assertEquals("Problem 6 error", answers["6"], problem.solve())
+        assertEquals(answers["6"], problem.solve(), "Problem 6 error")
     }
 
     @Test fun problem7IsCorrect() {
         val problem = Problem07()
-        assertEquals("Problem 7 error", answers["7"], problem.solve())
+        assertEquals(answers["7"], problem.solve(), "Problem 7 error")
     }
 
     @Test fun problem8IsCorrect() {
         val problem = Problem08()
-        assertEquals("Problem 8 error", answers["8"], problem.solve())
+        assertEquals(answers["8"], problem.solve(), "Problem 8 error")
     }
 
     @Test fun problem9IsCorrect() {
         val problem = Problem09()
-        assertEquals("Problem 9 error", answers["9"], problem.solve())
+        assertEquals(answers["9"], problem.solve(), "Problem 9 error")
     }
 
     @Test fun problem10IsCorrect() {
         val problem = Problem10()
-        assertEquals("Problem 10 error", answers["10"], problem.solve())
+        assertEquals(answers["10"], problem.solve(), "Problem 10 error"  )
     }
 }

@@ -4,12 +4,12 @@
 
 package problems
 
-import kotlin.coroutines.experimental.*
+import kotlin.coroutines.*
 import kotlin.collections.*
 
 object Sequences {
 
-    val fibonacci: Sequence<Int> = buildSequence {
+    val fibonacci: Sequence<Int> = sequence {
         var a = 0
         var b = 1
         yield(1)
@@ -21,7 +21,7 @@ object Sequences {
         }
     }
 
-    val primes: Sequence<Long>  = buildSequence {
+    val primes: Sequence<Long>  = sequence {
         val composites: MutableMap<Long, Long> = mutableMapOf()
         var n: Long = 3
         yield(2L)

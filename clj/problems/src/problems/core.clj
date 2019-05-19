@@ -5,16 +5,24 @@
 (require 'clojure.set)
 (require 'clojure.math.numeric-tower)
 
-; Paraedit is EVIL
-; if any language needs a compiler, it's this one: using infix accidentally
-; it is hard to keep track of parenthesis: incorrect scope accidentally
-; spent 10 minutes diagnosing this: "if [<expr>]" vs "if (<expr>)"; bloody truthiness
-; spent an hour debugging an extra pair of parenthesis in a let because ((println 5) #{1 5}) causes a NPE d'oh
-; let is pretty verbose and nested "(let [half (quot .length 2)] ...)"  vs. e.g.  "let half = s.length/2 in ..."
-; running into many things that static typing would fix - calling number as function, range not castable to number, etc.
-; missing parenthesis in an implicit do block... (let [pg (init-prime-gen)] last (repeatedly 10001 (.nextprime pg))) oops
-; it seems like almost every function can return nil, eeew
-; once again, using get wrong: it's get coll index, not get index coll... but clojure doesn't know that so I wasted 30 minutes
+; Paredit is EVIL
+; Oh how I miss static typing, in which all of these issues would be fixed
+; - used infix accidentally
+; - lost track of parenthesis and ended up with incorrect scoping
+; - spent 10 minutes scratching my head to find this mistake:
+;   "if [<expr>]" vs "if (<expr>)" because of truthiness (not a fan of truthiness at all)
+; - spent far too long debugging an extra pair of parenthesis in a let
+;   as e.g. "((println 5) #{1 5})" treats nil returned from print as a function
+; - spent far too long debugging a missing pair of parenthesis in a let
+;   e.g. "(let [pg (init-prime-gen)]
+ ;         last (repeatedly 10001 (...)))"
+; - many times accidentally calling a number a function, range not castable to number, etc.
+; - using get wrong: it's "(get collection index)", not "(get index collection)", but Clojure can't tell me that
+; let feels pretty verbose considering most languages don't need parenthesis/scope to declare variables
+;   e.g "(let [half (quot .length 2)] ...)"  vs. "val half = s.length/2 ..."
+; almost every function can take/return nil, ew, so strange constructs like "(or (get (get grid 5) 10) 0)" work
+; requires rainbow parenthesis plugin to be readable, the way I've have parenthesis on their own line
+;   is no-doubt not idiomatic
 
 (defn sum [coll] (reduce + coll))
 (defn product [coll] (reduce * coll))
@@ -273,9 +281,7 @@
               [ 20 69 36 41 72 30 23 88 34 62 99 69 82 67 59 85 74  4 36 16 ]
               [ 20 73 35 29 78 31 90  1 74 31 49 71 48 86 81 16 23 57  5 54 ]
               [  1 70 54 71 83 51 54 69 16 92 33 48 61 43 52  1 89 19 67 48 ]]
-        at-or-one (fn [[x y]] (or (get (get grid x) y) 1))
-
-       ]
+        at-or-one (fn [[x y]] (or (get (get grid x) y) 1))]
     (->>
       (for [x (range 0 20) y (range 0 20)] (get-lines x y))
       (mapcat identity)

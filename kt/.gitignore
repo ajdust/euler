@@ -4,3 +4,4 @@
 gradle/
 kt.iml
 settings.gradle
+out/
