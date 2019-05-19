@@ -58,22 +58,26 @@ object facben {
         }
       }
 
-      prime = nextPrimes.next()
-      knownPrimes += prime
-      while (prime <= quotient) {
-
-        var remainder = quotient % prime
-        while (remainder == 0L) {
-          quotient /= prime
-          remainder = quotient % prime
-          factors += prime
-        }
-
+      if (prime > quotient) {
+        factors
+      } else {
         prime = nextPrimes.next()
         knownPrimes += prime
-      }
+        while (prime <= quotient) {
 
-      factors
+          var remainder = quotient % prime
+          while (remainder == 0L) {
+            quotient /= prime
+            remainder = quotient % prime
+            factors += prime
+          }
+
+          prime = nextPrimes.next()
+          knownPrimes += prime
+        }
+
+        factors
+      }
     }
 
     def getFactors(of: Long): mutable.Set[Long] = {

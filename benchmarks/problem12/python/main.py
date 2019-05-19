@@ -39,7 +39,7 @@ class FactorFinder:
 
         for prime in self.knownPrimes:
             if prime > quotient:
-                break
+                return factors
 
             remainder = quotient % prime
             while remainder == 0:
@@ -52,15 +52,13 @@ class FactorFinder:
             self.knownPrimes.append(prime)
 
             if prime > quotient:
-                break
+                return factors
 
             remainder = quotient % prime
             while remainder == 0:
                 quotient = quotient // prime
                 remainder = quotient % prime
                 factors.append(prime)
-
-        return factors
 
     def getFactors(self, of):
         existing = self.known.get(of)

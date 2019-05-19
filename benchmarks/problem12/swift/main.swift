@@ -36,7 +36,7 @@ class FactorFinder {
 
         for prime in knownPrimes {
             if prime > quotient {
-                break
+                return factors
             }
 
             var remainder = quotient % prime
@@ -52,7 +52,7 @@ class FactorFinder {
             knownPrimes.append(prime)
 
             if prime > quotient {
-                break
+                return factors
             }
 
             var remainder = quotient % prime
@@ -62,8 +62,6 @@ class FactorFinder {
                 factors.append(prime)
             }
         }
-
-        return factors
     }
 
     func getFactors(of: Int) -> Set<Int> {

@@ -53,20 +53,23 @@ type FactorFinder =
                 remainder <- quotient % kprimes.Current
                 factors.Add(kprimes.Current)
 
-        let mutable prime: int64 = this.nextPrimes.Next()
-        this.knownPrimes.Add(prime)
-        while prime <= quotient do
-
-            let mutable remainder = quotient % prime
-            while remainder = 0L do
-                quotient <- quotient / prime
-                remainder <- quotient % prime
-                factors.Add(prime)
-
-            prime <- this.nextPrimes.Next()
+        if kprimes.Current > quotient then
+            factors
+        else
+            let mutable prime: int64 = this.nextPrimes.Next()
             this.knownPrimes.Add(prime)
+            while prime <= quotient do
 
-        factors
+                let mutable remainder = quotient % prime
+                while remainder = 0L do
+                    quotient <- quotient / prime
+                    remainder <- quotient % prime
+                    factors.Add(prime)
+
+                prime <- this.nextPrimes.Next()
+                this.knownPrimes.Add(prime)
+
+            factors
 
     member this.GetFactors(ofn: int64): HashSet<int64> =
         match this.known.TryGetValue(ofn) with
