@@ -1,6 +1,6 @@
 
 build: main.py
-	echo "#!/bin/bash" >> main
+	echo "#!/bin/bash" > main
 	echo "python3 main.py" >> main
 	chmod +x main
 

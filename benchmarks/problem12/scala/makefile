@@ -1,7 +1,7 @@
 
 build: main.scala
 	dotc main.scala
-	echo "#!/bin/bash" >> main
+	echo "#!/bin/bash" > main
 	echo "dotr facben" >> main
 	chmod +x main
 

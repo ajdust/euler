@@ -1,7 +1,7 @@
 
 build: main.jl
 	julia package.jl
-	echo "#!/bin/bash" >> main
+	echo "#!/bin/bash" > main
 	echo "./builddir/main" >> main
 	chmod +x main
 

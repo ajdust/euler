@@ -1,7 +1,7 @@
 
 build: Main.java
 	javac Main.java
-	echo "#!/bin/bash" >> main
+	echo "#!/bin/bash" > main
 	echo "java Main" >> main
 	chmod +x main
 
