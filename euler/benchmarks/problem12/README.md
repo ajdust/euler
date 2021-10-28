@@ -35,35 +35,30 @@ Full optimizing flags were passed to the language's compiler for those languages
 Below is a table of summarized results from a particular run. `/usr/bin/time -f "%x %e %M"` is used
 for the benchmark.
 
-| Language |  Elapsed Time (s) |  Max Resident Set Size (MB) |
+| Language |  Elapsed Time (s) | Memory (MB) |
 | ---      | ---:   | ---:  |
-|   Julia  |   5.6  |  1500 |
-|      Go  |  7.17  |   377 |
-|    Rust  |  7.36  |   772 |
-|     C++  |  7.92  |  1083 |
-|      C#  |  7.29  |  1176 |
-| Crystal  |  7.52  |  1422 |
-|      F#  |  8.12  |  1235 |
-|       D  |  8.65  |  1434 |
-|    Java  |  9.00  |  2635 |
-|   Swift  |  10.21 |   424 |
-|   Scala  |  10.32 |  1704 |
-|       C  |  12.02 |  2405 |
-|  Python  |  38.56 |  1566 |
-|     Nim  |  41.99 |  3159 |
+|    Rust  |   5.10 |   341 |
+|   Julia  |   5.65 |  1500 |
+| Node JS  |   5.97 |   653 |
+|      Go  |   7.52 |   367 |
+|     C++  |   7.63 |   678 |
+|      C#  |   7.80 |   815 |
+|      F#  |   7.89 |   835 |
+|     Nim  |   9.18 |  3290 |
+|    Java  |   9.31 |  1459 |
+|   Swift  |  20.73 |   374 |
+|  Python  |  41.99 |  1457 |
 
-VM runtimes installed: `openjdk 10.0.2 2018-07-17` and `Microsoft.NETCore.App 2.1.5`. Compilers used:
-- C `clang -O3` [6.0.0-1ubuntu2]
-- C++ `clang++ -O3` [6.0.0-1ubuntu2]
-- D `ldc2 -O` [1.8.0]
-- Go `go build` [1.11.2]
-- Rust `rustc -C opt-level=3` [1.32.0-nightly]
-- Swift `swiftc -O` [4.2.1]
-- Java `javac` [10.0.2]
-- Scala `dotc`
-- CSharp `dotnet -c release` [2.1.403],
-- FSharp `dotnet -c release` [2.1.403]
-- Crystal `crystal build --release` [0.27.0]
-- Nim `nim compile -d:release --opt:speed` [0.19.0]
-- Python `python3` [3.6.7]
+- C++ `clang++ -O3` [12.0.0 Windows]
+- Go `go build` [1.17.2]
+- Rust `rustc -C opt-level=3` [1.55]
+- Java `javac` [OpenJDK 17.0.1]
+- CSharp `dotnet -c release` [net5.0]
+- FSharp `dotnet -c release` [net5.0]
+- Nim `nim compile -d:release --opt:speed` [1.60]
+- Python `python` [3.9.0]
 - Julia [1.6.3]
+- Node JS [14.15.3]
+- Swift [5.5.1 Windows]
+
+
