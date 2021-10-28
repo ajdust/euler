@@ -49,3 +49,9 @@ cd javascript
 echo 'cd javascript'
 hyperfine -m 5 "node main.js"
 cd ..
+
+cd swift
+echo 'cd swift'
+swiftc .\main.swift -o main.exe -sdk $env:SDKROOT -I $env:SDKROOT/usr/lib/swift -L $env:SDKROOT/usr/lib/swift/windows
+hyperfine -m 5 main.exe
+cd ..
