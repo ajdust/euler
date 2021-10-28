@@ -12,7 +12,7 @@ end
 function nextPrime(self::PrimeGenerator)::Int64
 
     while haskey(self.sieve, self.n)
-        prime = get(self.sieve, self.n, 0)
+        prime = self.sieve[self.n]
 
         delete!(self.sieve, self.n)
 
@@ -35,11 +35,11 @@ end
 struct FactorFinder
     known::Dict{Int64,Set{Int64}}
     nextPrimes::PrimeGenerator
-    knownPrimes::Array{Int64}
+    knownPrimes::Vector{Int64}
     FactorFinder() = new(Dict(1 => Set(1)), PrimeGenerator(), [])
 end
 
-function getPrimeFactors(self::FactorFinder, of::Int64)::Array{Int64}
+function getPrimeFactors(self::FactorFinder, of::Int64)::Vector{Int64}
     factors = Int64[]
     quotient = of
 
@@ -76,9 +76,8 @@ function getPrimeFactors(self::FactorFinder, of::Int64)::Array{Int64}
 end
 
 function getFactors(self::FactorFinder, of::Int64)::Set{Int64}
-    existing = get(self.known, of, Set{Int64}())
-    if length(existing) > 0
-        return existing
+    if haskey(self.known, of)
+        return self.known[of]
     end
 
     factors = Set{Int64}([1, of])
@@ -109,7 +108,7 @@ function solve(factorCount)::Int64
     end
 end
 
-Base.@ccallable function julia_main(ARGS::Vector{String})::Cint
+function main()
     println("Answer: " * string(solve(1000)))
     return 0
 end

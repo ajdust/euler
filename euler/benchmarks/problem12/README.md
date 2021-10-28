@@ -37,6 +37,7 @@ for the benchmark.
 
 | Language |  Elapsed Time (s) |  Max Resident Set Size (MB) |
 | ---      | ---:   | ---:  |
+|   Julia  |   5.6  |  1500 |
 |      Go  |  7.17  |   377 |
 |    Rust  |  7.36  |   772 |
 |     C++  |  7.92  |  1083 |
@@ -48,7 +49,6 @@ for the benchmark.
 |   Swift  |  10.21 |   424 |
 |   Scala  |  10.32 |  1704 |
 |       C  |  12.02 |  2405 |
-|   Julia  |  24.22 |  1206 |
 |  Python  |  38.56 |  1566 |
 |     Nim  |  41.99 |  3159 |
 
@@ -66,4 +66,4 @@ VM runtimes installed: `openjdk 10.0.2 2018-07-17` and `Microsoft.NETCore.App 2.
 - Crystal `crystal build --release` [0.27.0]
 - Nim `nim compile -d:release --opt:speed` [0.19.0]
 - Python `python3` [3.6.7]
-- Julia (PackageCompiler) [1.0.2]
+- Julia [1.6.3]
