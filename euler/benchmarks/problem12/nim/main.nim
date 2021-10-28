@@ -1,4 +1,4 @@
-import tables, sets, sequtils
+import tables, sets
 
 type
   PrimeGeneratorState = ref object
@@ -45,7 +45,7 @@ proc initialFactorFinder(): FactorFinder =
   result = new(FactorFinder)
   result.nextPrimes = initialPrimeGeneratorState()
   result.knownPrimes = newSeq[int64]()
-  var one = initSet[int64]()
+  var one = initHashSet[int64]()
   one.incl(1'i64)
   result.known = newTable({1'i64:one})
 
@@ -78,15 +78,14 @@ proc getPrimeFactors(self: FactorFinder, ofn: int64): seq[int64] =
 
 proc getFactors(self: FactorFinder, ofn: int64): HashSet[int64] =
 
-  let existing = self.known.getOrDefault(ofn)
-  if len(existing) > 0:
-    return existing
+  if ofn in self.known:
+    return self.known[ofn]
 
-  let pfs = self.getPrimeFactors(ofn)
-  var factorSet = initSet[int64]()
+  var factorSet = initHashSet[int64]()
   factorSet.incl(1'i64)
   factorSet.incl(ofn)
 
+  let pfs = self.getPrimeFactors(ofn)
   for prime in pfs:
     let factor = ofn div prime
     for subfactor in self.getFactors(factor):
