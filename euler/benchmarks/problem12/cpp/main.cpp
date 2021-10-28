@@ -1,14 +1,9 @@
-// requires that sparsehash is installed: https://github.com/sparsehash/sparsehash
-// used because stl unordered_map is not as efficient as it can be: https://www.youtube.com/watch?v=fHNmRkzxHWs
-
 #include <cstdint>
 #include <iostream>
-#include <sparsehash/dense_hash_map>
-#include <sparsehash/dense_hash_set>
+#include "robin_hood.h"
 #include <vector>
 
-using google::dense_hash_set;
-using google::dense_hash_map;
+using namespace robin_hood;
 
 namespace factorbench {
 
@@ -16,28 +11,22 @@ class PrimeGenerator {
 private:
     int64_t n = 3;
     int64_t last = 2;
-    dense_hash_map<int64_t, int64_t> sieve;
+    unordered_map<int64_t, int64_t> sieve;
 public:
-    PrimeGenerator() {
-        sieve.set_empty_key(0);
-    }
+    PrimeGenerator() {}
 
     int64_t next() {
-        auto len = sieve.count(n);
-        while (len > 0) {
+        while (sieve.find(n) != sieve.end()) {
 
-            auto it = sieve[n];
-            sieve.erase(it);
-            auto prime = it;
+            auto prime = sieve[n];
+            sieve.erase(n);
 
             int64_t composite = n + prime + prime;
-            while (sieve.count(composite) > 0) {
+            while (sieve.find(composite) != sieve.end()) {
                 composite += prime + prime;
             }
             sieve[composite] = prime;
             n += 2;
-
-            len = sieve.count(n);
         }
 
         sieve[n * n] = n;
@@ -51,16 +40,16 @@ public:
 
 class FactorFinder {
 private:
-    dense_hash_map<int64_t, dense_hash_set<int64_t>> known;
+    unordered_map<int64_t, unordered_set<int64_t>> known;
     PrimeGenerator next_primes;
     std::vector<int64_t> known_primes;
 public:
 
     FactorFinder() {
-        dense_hash_set<int64_t> initSet;
-        initSet.set_empty_key(0);
+        unordered_set<int64_t> initSet;
+
         initSet.insert(1);
-        known.set_empty_key(0);
+
         known[1] = initSet;
     }
 
@@ -78,13 +67,13 @@ public:
             while (remainder == 0) {
                 quotient = quotient / prime;
                 remainder = quotient % prime;
-                factors.emplace_back(prime);
+                factors.push_back(prime);
             }
         }
 
         for (;;) {
             auto prime = next_primes.next();
-            known_primes.emplace_back(prime);
+            known_primes.push_back(prime);
 
             if (prime > quotient) {
                 return factors;
@@ -94,26 +83,24 @@ public:
             while (remainder == 0) {
                 quotient = quotient / prime;
                 remainder = quotient % prime;
-                factors.emplace_back(prime);
+                factors.push_back(prime);
             }
         }
 
         return factors;
     }
 
-    dense_hash_set<int64_t> get_factors(int64_t of) {
+    unordered_set<int64_t> get_factors(int64_t of) {
 
-        auto existing = known.find(of);
-        if (existing != known.end()) {
-            return existing->second;
+        if (known.find(of) != known.end()) {
+            return known[of];
         }
 
-        auto pfactors = get_prime_factors(of);
-        dense_hash_set<int64_t> factor_set;
-        factor_set.set_empty_key(0);
+        unordered_set<int64_t> factor_set;
         factor_set.insert(1);
         factor_set.insert(of);
 
+        auto pfactors = get_prime_factors(of);
         for (auto prime : pfactors) {
 
             auto factor = of / prime;
@@ -123,7 +110,7 @@ public:
 
         }
 
-        known.insert({ of, factor_set });
+        known[of] = factor_set;
         return factor_set;
     }
 };
