@@ -1,10 +1,6 @@
 
 build: main.jl
-	julia package.jl
-	echo "#!/bin/bash" > main
-	echo "./builddir/main" >> main
-	chmod +x main
+	echo 'Use BenchmarkTools.jl from REPL'
 
 clean:
-	rm -rf builddir
-	rm main
+	echo 'N/A'
