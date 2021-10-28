@@ -118,10 +118,11 @@ namespace factorbench
             }
         }
 
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
             var answer = Solve();
             Console.WriteLine($"Answer: {answer}");
+            return 0;
         }
     }
 }
